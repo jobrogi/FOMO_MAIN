@@ -107,7 +107,7 @@ function SignUp(){
                     <div className="flex w-full h-full justify-center p-4">
                         {popUpActive == 2?
                             <div className="text-white text-center w-full -mt-6">
-                                <form action="http://localhost:5000/signUp" method="POST" id="SignUp" className={formSection == 0? "w-full h-fit pointer-events-auto": "hidden"}>
+                                <form method="POST" id="SignUp" className={formSection == 0? "w-full h-fit pointer-events-auto": "hidden"}>
                                     <p className="p-2 text-2xl">Sign Up 1/2</p>
                                     <hr />
                                     <p className="p-4 mb-2">No Information will be shown or shared publicly. Your information is only used for security purposes.</p>
