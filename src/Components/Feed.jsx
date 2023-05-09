@@ -11,11 +11,11 @@ function Feed(){
 
     return(
         <div className="p-2">
-            <ul className="flex justify-between px-16 items-center">
-                <li onClick={setActiveButton} value={0} className={active == 0 ? "text-xl text-white transition-all duration-200" : "text-white text-lg transition-all duration-200"}>Following</li>
+            <ul className="flex flex-nowrap justify-center ">
+                <li onClick={setActiveButton} value={0} className={active == 0 ? "text-xl text-white transition-all duration-200 mx-10" : "text-white text-lg transition-all duration-200 mx-8"}>Following</li>
 
                 {/* <li className="text-white">Following</li> */}
-                <li onClick={setActiveButton} value={1}  className={active == 1 ? "text-xl text-white transition-all duration-200" : "text-white text-lg transition-all duration-200"}>For You</li>
+                <li onClick={setActiveButton} value={1}  className={active == 1 ? "text-xl text-white transition-all duration-200 mx-10" : "text-white text-lg transition-all duration-200 mx-8"}>For You</li>
             </ul>
 
             {/* Card */}
