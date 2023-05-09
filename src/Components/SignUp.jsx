@@ -58,9 +58,8 @@ function SignUp(){
         var username = document.getElementById('username').value;
         var password = document.getElementById('password').value;
 
-        // http://localhost:8080/signUp
 
-        fetch('http://localhost:8080/signUp', {
+        fetch('https://shielded-scrubland-55438.herokuapp.com/signUp', {
             method: 'POST',
             body: JSON.stringify({
                 fName: fName,
