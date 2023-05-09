@@ -58,7 +58,32 @@ function SignUp(){
         var username = document.getElementById('username').value;
         var password = document.getElementById('password').value;
 
+        // For Local Host
+        // fetch('http://localhost:8080/signUp', {
+        //     method: 'POST',
+        //     body: JSON.stringify({
+        //         fName: fName,
+        //         lName: lName,
+        //         email: email,
+        //         dob: dob,
+        //         username:username,
+        //         password: password
+        //     }), // The data
+        //     headers: {
+        //         'Content-type': 'application/json; charset=UTF-8' // The type of data you're sending
+        //     }
+        // }).then(function (response) {
+        //     if (response.ok) {
+        //         return response.json();
+        //     }
+        //     return Promise.reject(response);
+        // }).then(function (data) {
+        //     // console.log(data);
+        // }).catch(function (error) {
+        //     console.warn('Something went wrong.', error);
+        // });
 
+        // For Heroku app
         fetch('https://shielded-scrubland-55438.herokuapp.com/signUp', {
             method: 'POST',
             body: JSON.stringify({
