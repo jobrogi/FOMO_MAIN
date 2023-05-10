@@ -10,10 +10,9 @@ function App() {
     <div className='bg-slate-700 min-h-screen'>
       <Header/>
       <Feed/>
-
-      {/* If Not Signed in or up */}
       <SignUp/>
     </div>
+    
   );
 }
 

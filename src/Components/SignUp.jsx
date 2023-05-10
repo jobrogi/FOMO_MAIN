@@ -46,11 +46,15 @@ function SignUp(){
         if(e.target.value == "Back"){
             setFormSection(formSection - 1);
         }
-        console.log(formSection);
     }
+
+    const[errMessage,setErrMessage] = useState("");
+
 
     function handleSignUp(e){
         e.preventDefault();
+
+
         var fName = document.getElementById('fName').value;
         var lName = document.getElementById('lName').value;
         var email = document.getElementById('email').value;
@@ -58,60 +62,95 @@ function SignUp(){
         var username = document.getElementById('username').value;
         var password = document.getElementById('password').value;
 
-        // For Local Host
-        // fetch('http://localhost:8080/signUp', {
-        //     method: 'POST',
-        //     body: JSON.stringify({
-        //         fName: fName,
-        //         lName: lName,
-        //         email: email,
-        //         dob: dob,
-        //         username:username,
-        //         password: password
-        //     }), // The data
-        //     headers: {
-        //         'Content-type': 'application/json; charset=UTF-8' // The type of data you're sending
-        //     }
-        // }).then(function (response) {
-        //     if (response.ok) {
-        //         return response.json();
-        //     }
-        //     return Promise.reject(response);
-        // }).then(function (data) {
-        //     // console.log(data);
-        // }).catch(function (error) {
-        //     console.warn('Something went wrong.', error);
-        // });
+        // Check that all inputs are up to standard before fetching the req {TODO}
+        // Check to see that the DOB is not from the future or not younger that 13 {TODO}
+        const year = dob.slice(0,4);
+        const currentDate = new Date();
+        const currentYear = currentDate.getFullYear();
+        if(year >= currentYear - 13){
+            // Error Too young
+            console.log('Under 13')
+        } else {
+            // If over 13 then continue fetching for sign up
+            // For Local Host
+            fetch('http://localhost:8080/signUp', {
+                method: 'POST',
+                body: JSON.stringify({
+                    fName: fName,
+                    lName: lName,
+                    email: email,
+                    dob: dob,
+                    username:username,
+                    password: password
+                }), // The data
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8' // The type of data you're sending
+                }
+            }).then(function (response) {
+                if(!response.ok){
+                    response.text().then(errorMessage=>{
+                        // 
+                        // alert(errorMessage);
+                        setErrMessage(errorMessage);
+                    })
+                } else{
+                    return response.json();
+                }
+                return Promise.reject(response);
+            }).then(function (data) {
+                // console.log("Success: " + data);
+                setErrMessage("Success!");
 
-        // For Heroku app
-        fetch('https://shielded-scrubland-55438.herokuapp.com/signUp', {
-            method: 'POST',
-            body: JSON.stringify({
-                fName: fName,
-                lName: lName,
-                email: email,
-                dob: dob,
-                username:username,
-                password: password
-            }), // The data
-            headers: {
-                'Content-type': 'application/json; charset=UTF-8' // The type of data you're sending
-            }
-        }).then(function (response) {
-            if (response.ok) {
-                return response.json();
-            }
-            return Promise.reject(response);
-        }).then(function (data) {
-            // console.log(data);
-        }).catch(function (error) {
-            console.warn('Something went wrong.', error);
-        });
+
+                // console.log(data);
+            }).catch(function (error) {
+                console.log(error);
+                // console.warn('Something went wrong.', error);
+                // alert(error);
+            });
+
+            // For Heroku app
+            // fetch('https://shielded-scrubland-55438.herokuapp.com/signUp', {
+            //     method: 'POST',
+            //     body: JSON.stringify({
+            //         fName: fName,
+            //         lName: lName,
+            //         email: email,
+            //         dob: dob,
+            //         username:username,
+            //         password: password
+            //     }), // The data
+            //     headers: {
+            //         'Content-type': 'application/json; charset=UTF-8' // The type of data you're sending
+            //     }
+            // }).then(function (response) {
+            //     if (response.ok) {
+            //         return response.json();
+            //     }
+            //     return Promise.reject(response);
+            // }).then(function (data) {
+            //     // console.log(data);
+            // }).catch(function (error) {
+            //     console.warn('Something went wrong.', error);
+            // });
+
+        }
+
+
     }
 
     return(
-        <div className="min-h-full bottom-0 absolute">
-            <div className={active==1 ? "flex flex-wrap bg-black w-full fixed bottom-0 px-4 pb-4 pt-1 transition-all duration-200" : "flex flex-wrap bg-gradient-to-b from-transparent to-gray-900 w-full fixed bottom-0 px-4 pb-4 pt-1 transition-all duration-200 translate-y-12"}>
+        <div className="min-h-full w-full bottom-0 absolute">
+
+            {/* Custom error message system */}
+            <div className={errMessage === ""? "hidden": "w-full flex justify-center fixed top-0"}>
+                <div className=" mt-3 text-center min-w-fit bg-gray-500 p-3 rounded-lg text-white flex">
+                    <h1>{errMessage}</h1>
+                    <button className="ps-5" onClick={() => setErrMessage("")}>X</button>
+                </div>
+            </div>
+
+            <div className={active== 1 ? "flex flex-wrap bg-black w-full fixed bottom-0 px-4 pb-4 pt-1 transition-all duration-200" : "flex flex-wrap bg-gradient-to-b from-transparent to-gray-900 w-full fixed bottom-0 px-4 pb-4 pt-1 transition-all duration-200 translate-y-12"}>
                 <div className="text-white text-center w-full mb-1" >
                     {active == 1? <button onClick={setActiveContent}><i className="fa-solid fa-angle-down"></i></button> : <button onClick={setActiveContent}><i className="fa-solid fa-angle-up"></i></button> }
                 </div>
@@ -147,7 +186,7 @@ function SignUp(){
 
                                     <div className="border-2 flex flex-wrap justify-center p-2 mt-4">
                                         <h1 className="bg-gradient-to-tr from-black to-gray-900 px-3 -mt-5 w-fit">Email</h1>
-                                        <input type="text" id='email' className="p-3 mb-2 m-1 w-full outline-none text-black" placeholder="Email Address" />
+                                        <input type="email" id='email' className="p-3 mb-2 m-1 w-full outline-none text-black" placeholder="Email Address" />
                                     </div>
 
                                     <div className="border-2 flex flex-wrap justify-center p-2 mt-4">
