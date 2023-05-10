@@ -110,29 +110,41 @@ function SignUp(){
             });
 
             // For Heroku app
-            // fetch('https://shielded-scrubland-55438.herokuapp.com/signUp', {
-            //     method: 'POST',
-            //     body: JSON.stringify({
-            //         fName: fName,
-            //         lName: lName,
-            //         email: email,
-            //         dob: dob,
-            //         username:username,
-            //         password: password
-            //     }), // The data
-            //     headers: {
-            //         'Content-type': 'application/json; charset=UTF-8' // The type of data you're sending
-            //     }
-            // }).then(function (response) {
-            //     if (response.ok) {
-            //         return response.json();
-            //     }
-            //     return Promise.reject(response);
-            // }).then(function (data) {
-            //     // console.log(data);
-            // }).catch(function (error) {
-            //     console.warn('Something went wrong.', error);
-            // });
+            fetch('https://shielded-scrubland-55438.herokuapp.com/signUp', {
+                method: 'POST',
+                body: JSON.stringify({
+                    fName: fName,
+                    lName: lName,
+                    email: email,
+                    dob: dob,
+                    username:username,
+                    password: password
+                }), // The data
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8' // The type of data you're sending
+                }
+            }).then(function (response) {
+                if(!response.ok){
+                    response.text().then(errorMessage=>{
+                        // 
+                        // alert(errorMessage);
+                        setErrMessage(errorMessage);
+                    })
+                } else{
+                    return response.json();
+                }
+                return Promise.reject(response);
+            }).then(function (data) {
+                // console.log("Success: " + data);
+                setErrMessage("Success!");
+
+
+                // console.log(data);
+            }).catch(function (error) {
+                console.log(error);
+                // console.warn('Something went wrong.', error);
+                // alert(error);
+            });
 
         }
 
