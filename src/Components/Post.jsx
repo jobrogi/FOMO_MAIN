@@ -1,5 +1,6 @@
 import React from "react";
 import data from "../UserData.json";
+import ImageResizer from "../utils/ImageResizer";
 
 function Post(){
     return(
@@ -10,7 +11,8 @@ function Post(){
                 <div className="w-full" key={data.id}>
                     {/* Profile Image, Profile Username, Post Description */}
                     <div className="flex w-full flex-nowrap mt-2">
-                        <img className="w-16 h-16 rounded-full" src={data.ProfileImg} alt="" />
+                        <img className="object-cover w-16 h-16 rounded-full" src={data.ProfileImg} alt="" />
+
                         <div className="ms-2">
                             <h1 className=" text-white font-bold w-full">{data.Name}</h1>
                             <p className="text-white">{data.PostDesc}</p>
@@ -19,7 +21,7 @@ function Post(){
 
                     {/* Post Image or Video / Post Interactions */}
                     <div className="flex flex-wrap ms-16 mt-2 w-fit ">
-                        <img className=" rounded-xl min-w-full" src={data.PostImg} alt="" />
+                        <img className="rounded-xl min-w-full object-fit" src={data.PostImg} alt="" />
                         <ul className="flex w-full justify-evenly mt-1">
                             <li className="text-white"><i className="fa-solid fa-heart"></i> {data.Likes}</li>
                             <li className="text-white"><i className="fa-solid fa-comment"></i> {data.Comments}</li>
