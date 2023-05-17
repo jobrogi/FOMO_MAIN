@@ -5,7 +5,7 @@ function SignUp(){
 
     const { setIsAuthenticated, setUser } = React.useContext(AuthContext);
     const {setCurrentPage} = React.useContext(AuthContext);
-
+    
 
     const [active, setActive] = useState(1);
     
@@ -54,155 +54,131 @@ function SignUp(){
     }
 
     const[errMessage,setErrMessage] = useState("");
-    
-    // For Local Host
-    function handleSignUp(e){
+
+    function handleSignUp(e) {
         e.preventDefault();
+      
         var fName = document.getElementById('fName').value;
         var lName = document.getElementById('lName').value;
         var email = document.getElementById('email').value;
         var dob = document.getElementById('dob').value;
         var username = document.getElementById('username').value;
         var password = document.getElementById('password').value;
-
-        // Check that all inputs are up to standard before fetching the req {TODO}
-        // Check to see that the DOB is not from the future or not younger that 13 {TODO}
-        const year = dob.slice(0,4);
+      
+        const year = dob.slice(0, 4);
         const currentDate = new Date();
         const currentYear = currentDate.getFullYear();
-        if(year >= currentYear - 13){
-            // Error Too young
-            console.log('Under 13')
+
+        console.log(fName)
+      
+        if (year >= currentYear - 13) {
+          console.log('Under 13');
         } else {
-            // If over 13 then continue fetching for sign up
-            // For Local Host
-            const url = "http://localhost:8080/signUp" || 'https://shielded-scrubland-55438.herokuapp.com/signUp';
-            fetch(url, {
-                method: 'POST',
-                body: JSON.stringify({
-                    fName: fName,
-                    lName: lName,
-                    email: email,
-                    dob: dob,
-                    username:username,
-                    password: password
-                }), // The data
-                headers: {
-                    'Content-type': 'application/json; charset=UTF-8' // The type of data you're sending
-                }
-            }).then(function (response) {
-                if(!response.ok){
-                    response.text().then(errorMessage=>{
-                        // 
-                        // alert(errorMessage);
-                        setErrMessage(errorMessage);
-                    })
-                } else{
-                    return response.json();
-                }
-                return Promise.reject(response);
-            }).then(function (data) {
-                // console.log("Success: " + data);
-                
-                setErrMessage("Success! Welcome " + data.user.fName);
-                setIsAuthenticated(true);
-                setUser(data.user);
-                setPopUp(0);
-
-                // console.log(data);
-            }).catch(function (error) {
-                console.log(error);
-                // console.warn('Something went wrong.', error);
-                // alert(error);
+          let url;
+          if (window.location.hostname === 'localhost') {
+            url = 'http://localhost:8080/signUp';
+          } else {
+            url = 'https://shielded-scrubland-55438.herokuapp.com/signUp';
+          }
+      
+          fetch(url, {
+            method: 'POST',
+            body: JSON.stringify({ fName, lName, email, dob, username, password }),
+            headers: {
+              'Content-type': 'application/json; charset=UTF-8'
+            }
+          })
+            .then(response => {
+              if (!response.ok) {
+                return response.text().then(errorMessage => {
+                  setErrMessage(errorMessage);
+                  throw new Error(errorMessage);
+                });
+              } else {
+                return response.json();
+              }
+            })
+            .then(data => {
+              setErrMessage("Success! Welcome " + data.user.fName);
+      
+              const userData = {
+                fName: data.user[0].fName,
+                lName: data.user[0].lName,
+                email: data.user[0].email,
+                username: data.user[0].username
+              };
+      
+              localStorage.setItem('sessionId', data.sessionId);
+              localStorage.setItem('userData', JSON.stringify(userData));
+      
+              console.log(localStorage.getItem('userData'));
+              setIsAuthenticated(true);
+              setUser(userData);
+              setCurrentPage(1);
+              setPopUp(0);
+            })
+            .catch(error => {
+              console.log(error);
             });
-
-            // For Heroku app
-            // fetch('https://shielded-scrubland-55438.herokuapp.com/signUp', {
-            //     method: 'POST',
-            //     body: JSON.stringify({
-            //         fName: fName,
-            //         lName: lName,
-            //         email: email,
-            //         dob: dob,
-            //         username:username,
-            //         password: password
-            //     }), // The data
-            //     headers: {
-            //         'Content-type': 'application/json; charset=UTF-8' // The type of data you're sending
-            //     }
-            // }).then(function (response) {
-            //     if(!response.ok){
-            //         response.text().then(errorMessage=>{
-            //             // 
-            //             // alert(errorMessage);
-            //             setErrMessage(errorMessage);
-            //         })
-            //     } else{
-            //         return response.json();
-            //     }
-            //     return Promise.reject(response);
-            // }).then(function (data) {
-            //     // console.log("Success: " + data);
-            //     setErrMessage("Success!");
-
-            //     // console.log(data);
-            // }).catch(function (error) {
-            //     console.log(error);
-            //     // console.warn('Something went wrong.', error);
-            //     // alert(error);
-            // });
         }
-    }
+      }
+      
 
-    function handleLogIn(e){
+    function handleLogIn(e) {
         e.preventDefault();
-        // console.log('Submitted')
-        var username = document.getElementById('_username').value;
-        var password = document.getElementById('_password').value;
+      
+        const username = document.getElementById('_username').value;
+        const password = document.getElementById('_password').value;
+      
+        let url;
+          if (window.location.hostname === 'localhost') {
+            url = 'http://localhost:8080/signUp';
+          } else {
+            url = 'https://shielded-scrubland-55438.herokuapp.com/signUp';
+          }
+      
+        fetch(url, {
+          method: 'POST',
+          body: JSON.stringify({ username, password }),
+          headers: {
+            'Content-type': 'application/json; charset=UTF-8'
+          }
+        })
+          .then(response => {
+            if (!response.ok) {
+              return response.text().then(errorMessage => {
+                setErrMessage(errorMessage);
+                throw new Error(errorMessage);
+              });
+            } else {
+              return response.json();
+            }
+          })
+          .then(data => {
+            setErrMessage("Success! Welcome " + data.user[0].fName);
+      
+            const userData = {
+              fName: data.user[0].fName,
+              lName: data.user[0].lName,
+              email: data.user[0].email,
+              username: data.user[0].username
+            };
+      
+            localStorage.setItem('sessionId', data.sessionId);
+            localStorage.setItem('userData', JSON.stringify(userData));
+      
+            console.log(localStorage.getItem('userData'));
+            setIsAuthenticated(true);
+            setUser(userData);
+            setCurrentPage(1);
+            setPopUp(0);
+          })
+          .catch(error => {
+            console.log('CATCH ERROR @ SIGN IN ' + error);
+          });
+      }
+      
 
-        const url = "http://localhost:8080/logIn" || 'https://shielded-scrubland-55438.herokuapp.com/logIn';
-            fetch(url, {
-                method: 'POST',
-                body: JSON.stringify({
-                    username: username,
-                    password: password
-                }), // The data
-                headers: {
-                    'Content-type': 'application/json; charset=UTF-8' // The type of data you're sending
-                }
-            }).then(function (response) {
-                if(!response.ok){
-                    response.text().then(errorMessage=>{
-                        // 
-                        // alert(errorMessage);
-                        setErrMessage(errorMessage);
-                    })
-                } else{
-                    return response.json();
-                }
-                return Promise.reject(response);
-            }).then(function (data) {
-                setErrMessage("Success! Welcome " + data.user[0].fName);
-                const userData = {
-                    fName: data.user[0].fName,
-                    lName: data.user[0].lName,
-                    email: data.user[0].email,
-                    username: data.user[0].username
-                }
-                setIsAuthenticated(true);
-                setUser(userData);
-                setCurrentPage(1);
-                setPopUp(0);
-
-                // console.log(data);
-            }).catch(function (error) {
-                console.log('CATCH ERROR @ SIGN IN '+ error);
-                // console.log(error);
-                // console.warn('Something went wrong.', error);
-                // alert(error);
-            });
-
-    }
     
     return(
         <div className="min-h-full w-full bottom-0 absolute">
@@ -221,10 +197,9 @@ function SignUp(){
                 </div>
                 <div className={active == 1 ? "flex justify-center items-baseline w-full" : "flex justify-center w-full"}>
                     <div className="sm:flex flex flex-nowrap w-full justify-center">
-                        <button className="text-black h-fit outline-none bg-blue-400 rounded-lg p-1 sm:px-12" data-modal-show="modalID" value={"SignUp"} onClick={SetPopUp}>Sign Up</button>
-                        <button className="text-black h-fit outline-none bg-blue-400 rounded-lg p-1 ms-2 sm:px-12" data-modal-show="modalID" value={"SignIn"} onClick={SetPopUp}>Sign In</button>
+                        <button className="text-dark-text h-fit outline-none bg-dark-accent-1  rounded-lg p-1 sm:px-12" data-modal-show="modalID" value={"SignUp"} onClick={SetPopUp}>Sign Up</button>
+                        <button className="text-dark-text h-fit outline-none bg-dark-accent-1  rounded-lg p-1 ms-2 sm:px-12" data-modal-show="modalID" value={"SignIn"} onClick={SetPopUp}>Sign In</button>
                     </div>
-                    
                 </div>
             </div>
 
@@ -258,7 +233,7 @@ function SignUp(){
                                         <h1 className="bg-gradient-to-tr from-black to-gray-900 px-3 -mt-5 w-fit">Date of Birth</h1>
                                         <input type="date" id="dob" className="p-3 mb-2 m-1 w-full outline-none text-black" placeholder="Email Address" />
                                     </div>
-                                    <button type="button" value={"Next"} onClick={SetFormSection} className="w-full bg-blue-400 p-2 mt-2 rounded-lg">Next</button>
+                                    <button type="button" value={"Next"} onClick={SetFormSection} className="w-full bg-dark-accent-1  p-2 mt-2 rounded-lg">Next</button>
                                 </form>
 
                                 <div action="POST" form="SignUp" className={formSection == 1? "w-full h-fit pointer-events-auto": "hidden"}>
@@ -284,8 +259,8 @@ function SignUp(){
                                     </div>
 
                                     <div className="flex flex-nowrap">
-                                        <button type="button" value={"Back"} onClick={SetFormSection} className="w-1/2 bg-blue-400 p-2 mt-2 m-2 rounded-lg">Back</button>
-                                        <button form="SignUp" type="submit" onClick={handleSignUp} className="w-1/2 bg-blue-400 p-2 mt-2 m-2 rounded-lg">Submit</button>
+                                        <button type="button" value={"Back"} onClick={SetFormSection} className="w-1/2 bg-dark-accent-1 p-2 mt-2 m-2 rounded-lg">Back</button>
+                                        <button form="SignUp" type="submit" onClick={handleSignUp} className="w-1/2 bg-dark-accent-1  p-2 mt-2 m-2 rounded-lg">Submit</button>
                                     </div>
                                     
                                 </div>
@@ -324,7 +299,7 @@ function SignUp(){
                                         </div>
 
                                         <div className="flex flex-nowrap">
-                                            <button form="SignIn" type="button" value={"Next"} onClick={SetFormSection} className="w-full bg-blue-400 p-2 mt-2 m-2 rounded-lg">Next</button>
+                                            <button form="SignIn" type="button" value={"Next"} onClick={SetFormSection} className="w-full bg-dark-accent-1  p-2 mt-2 m-2 rounded-lg">Next</button>
                                         </div>
 
                                     </form>
@@ -340,8 +315,8 @@ function SignUp(){
 
 
                                     <div className="flex flex-nowrap pointer-events-auto">
-                                            <button form="SignIn" type="button" value={"Back"} onClick={SetFormSection} className="w-1/2 bg-blue-400 p-2 mt-2 m-2 rounded-lg pointer-events-auto">Back</button>
-                                            <button form="SignUp" type="submit" onClick={handleLogIn} className="w-1/2 bg-blue-400 p-2 mt-2 m-2 rounded-lg">Submit</button>
+                                            <button form="SignIn" type="button" value={"Back"} onClick={SetFormSection} className="w-1/2 bg-dark-accent-1  p-2 mt-2 m-2 rounded-lg pointer-events-auto">Back</button>
+                                            <button form="SignUp" type="submit" onClick={handleLogIn} className="w-1/2 bg-dark-accent-1  p-2 mt-2 m-2 rounded-lg">Submit</button>
                                     </div>
                                 </div>
                                 

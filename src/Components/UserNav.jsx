@@ -3,8 +3,7 @@ import AuthContext from './AuthContext';
 
 
 function UserNav(){
-    const [isAuthenticated, setIsAuthenticated] = React.useState(false);
-    const [user, setUser] = React.useState(null);
+    const {setCurrentPage} = React.useContext(AuthContext);
 
     const [active, setActive] = useState(1);
     
@@ -18,23 +17,26 @@ function UserNav(){
     }
 
     return (
-        <div className="min-h-full w-full bottom-0 absolute pointer-events-none">
-            <div className={active== 1 ? "flex flex-wrap bg-black w-full fixed bottom-0 px-4 pb-4 pt-1 transition-all duration-200" : "flex flex-wrap bg-gradient-to-b from-transparent to-gray-900 w-full fixed bottom-0 px-4 pb-4 pt-1 transition-all duration-200 translate-y-16"}>
-                <div className="text-white text-center w-full mb-1  pointer-events-auto" >
-                    {active == 1? <button aria-label="Sign Up Button" onClick={setActiveContent}><i className="fa-solid fa-angle-down"></i></button> : <button onClick={setActiveContent}><i className="fa-solid fa-angle-up"></i></button> }
-                </div>
-                <div className={active == 1 ? "flex justify-center items-baseline w-full" : "flex justify-center w-full"}>
-                    <div className="sm:flex flex flex-nowrap w-full justify-center">
-                        <ul className="text-white flex pointer-events-auto">
-                            <li className="m-1"><button className="bg-blue-500 p-2 rounded">HOME</button></li>
-                            <li className="m-1"><button className="bg-blue-500 p-2 rounded">+</button></li>
-                            <li className="m-1"><button className="bg-blue-500 p-2 rounded">Profile</button></li>
-                        </ul>
-                    </div>
+        // <div className="min-h-fit w-full  pointer-events-none">
+            
+        // // </div>
 
+        <footer className="sticky bottom-0 min-h-fit w-full mt-2  pointer-events-none m-0">
+            <div className={active== 1 && "flex flex-wrap bg-dark-primary w-full bottom-0 px-4 py-2 transition-all duration-200"}>
+                {/* <div className="text-white text-center w-full mb-1  pointer-events-auto" >
+                {active == 1? <button className="outline-none" aria-label="Sign Up Button" onClick={setActiveContent}><i className="fa-solid fa-angle-down"></i></button> : <button className="outline-none" onClick={setActiveContent}><i className="fa-solid fa-angle-up"></i></button> }
+                </div> */}
+                <div className="sm:flex flex flex-nowrap w-full justify-center">
+                    {/* <button className="bg-blue-500 absolute bottom-0 mb-28 text-white p-2 rounded" onClick={handleLogout}>LOGOUT</button> */}
+
+                    <ul className="text-white flex items-center pointer-events-auto">
+                        <li className="-me-3"><button className="bg-dark-border text-dark-text pe-4 p-2 rounded text-sm" onClick={()=>{setCurrentPage(0)}}>HOME</button></li>
+                        <li className="relative z-20"><button className="bg-dark-accent-1 w-12 h-12 p-2 rounded-full text-xl" onClick={()=>{setCurrentPage(2)}} ><h1 className="text-xl mb-2">+</h1></button></li>
+                        <li className="-ms-3"><button className="bg-dark-border text-dark-text ps-4 p-2 rounded text-sm" onClick={()=>{setCurrentPage(1)}}>Profile</button></li>
+                    </ul>
                 </div>
             </div>
-        </div>
+        </footer>
     )
 }
 
