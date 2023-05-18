@@ -9,9 +9,9 @@ function Settings(){
 
         let url;
           if (window.location.hostname === 'localhost') {
-            url = 'http://localhost:8080/signUp';
+            url = 'http://localhost:8080/logout';
           } else {
-            url = 'https://shielded-scrubland-55438.herokuapp.com/signUp';
+            url = 'https://pacific-citadel-02863.herokuapp.com/logout';
           }
        
         

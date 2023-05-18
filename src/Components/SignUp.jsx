@@ -78,7 +78,7 @@ function SignUp(){
           if (window.location.hostname === 'localhost') {
             url = 'http://localhost:8080/signUp';
           } else {
-            url = 'https://shielded-scrubland-55438.herokuapp.com/signUp';
+            url = 'https://pacific-citadel-02863.herokuapp.com/signUp';
           }
       
           fetch(url, {
@@ -136,7 +136,7 @@ function SignUp(){
           if (window.location.hostname === 'localhost') {
             url = 'http://localhost:8080/logIn';
           } else {
-            url = 'https://shielded-scrubland-55438.herokuapp.com/logIn';
+            url = 'https://pacific-citadel-02863.herokuapp.com/logIn';
           }
       
         fetch(url, {
