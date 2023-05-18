@@ -1,6 +1,5 @@
 import React from "react";
 import data from "../UserData.json";
-import ImageResizer from "../utils/ImageResizer";
 
 function Post(){
     return(

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import AuthContext from './AuthContext';
 
 function SignUp(){
@@ -10,10 +10,10 @@ function SignUp(){
     const [active, setActive] = useState(1);
     
     function setActiveContent(){
-        if(active == 1){
+        if(active === 1){
             setActive(0);
         }
-        if(active == 0){
+        if(active === 0){
             setActive(1);
         }
     }
@@ -23,15 +23,15 @@ function SignUp(){
     function SetPopUp(e){
         setFormSection(0);
 
-        if(e.target.value == "Close"){
+        if(e.target.value === "Close"){
             setPopUp(0);
 
         }
-        if(e.target.value == "SignIn"){
+        if(e.target.value === "SignIn"){
             setPopUp(1);
 
         }
-        if(e.target.value == "SignUp"){
+        if(e.target.value === "SignUp"){
             setPopUp(2);
 
         }
@@ -40,15 +40,15 @@ function SignUp(){
     const[formSection,setFormSection] = useState(0);
     
     function SetFormSection(e){
-        if(e.target.value == "Close"){
+        if(e.target.value === "Close"){
             setFormSection(0);
 
         }
 
-        if(e.target.value == "Next"){
+        if(e.target.value === "Next"){
             setFormSection(formSection + 1);
         }
-        if(e.target.value == "Back"){
+        if(e.target.value === "Back"){
             setFormSection(formSection - 1);
         }
     }
@@ -129,12 +129,14 @@ function SignUp(){
       
         const username = document.getElementById('_username').value;
         const password = document.getElementById('_password').value;
+
+        console.log(username + '  ' + password)
       
         let url;
           if (window.location.hostname === 'localhost') {
-            url = 'http://localhost:8080/signUp';
+            url = 'http://localhost:8080/logIn';
           } else {
-            url = 'https://shielded-scrubland-55438.herokuapp.com/signUp';
+            url = 'https://shielded-scrubland-55438.herokuapp.com/logIn';
           }
       
         fetch(url, {
@@ -191,11 +193,11 @@ function SignUp(){
                 </div>
             </div>
 
-            <div className={active== 1 ? "flex flex-wrap bg-black w-full fixed bottom-0 px-4 pb-4 pt-1 transition-all duration-200" : "flex flex-wrap bg-gradient-to-b from-transparent to-gray-900 w-full fixed bottom-0 px-4 pb-4 pt-1 transition-all duration-200 translate-y-12"}>
+            <div className={active=== 1 ? "flex flex-wrap bg-black w-full fixed bottom-0 px-4 pb-4 pt-1 transition-all duration-200" : "flex flex-wrap bg-gradient-to-b from-transparent to-gray-900 w-full fixed bottom-0 px-4 pb-4 pt-1 transition-all duration-200 translate-y-12"}>
                 <div className="text-white text-center w-full mb-1" >
-                    {active == 1? <button aria-label="Sign Up Button" onClick={setActiveContent}><i className="fa-solid fa-angle-down"></i></button> : <button onClick={setActiveContent}><i className="fa-solid fa-angle-up"></i></button> }
+                    {active === 1? <button aria-label="Sign Up Button" onClick={setActiveContent}><i className="fa-solid fa-angle-down"></i></button> : <button onClick={setActiveContent}><i className="fa-solid fa-angle-up"></i></button> }
                 </div>
-                <div className={active == 1 ? "flex justify-center items-baseline w-full" : "flex justify-center w-full"}>
+                <div className={active === 1 ? "flex justify-center items-baseline w-full" : "flex justify-center w-full"}>
                     <div className="sm:flex flex flex-nowrap w-full justify-center">
                         <button className="text-dark-text h-fit outline-none bg-dark-accent-1  rounded-lg p-1 sm:px-12" data-modal-show="modalID" value={"SignUp"} onClick={SetPopUp}>Sign Up</button>
                         <button className="text-dark-text h-fit outline-none bg-dark-accent-1  rounded-lg p-1 ms-2 sm:px-12" data-modal-show="modalID" value={"SignIn"} onClick={SetPopUp}>Sign In</button>
@@ -209,9 +211,9 @@ function SignUp(){
                     <button className=" w-8 h-8 text-white float-right m-2 pointer-events-auto" value={"Close"} onClick={SetPopUp}>X</button>
 
                     <div className="flex w-full h-full justify-center p-4">
-                        {popUpActive == 2?
+                        {popUpActive === 2?
                             <div className="text-white text-center w-full -mt-6">
-                                <form method="POST" id="SignUp" className={formSection == 0? "w-full h-fit pointer-events-auto": "hidden"}>
+                                <form method="POST" id="SignUp" className={formSection === 0? "w-full h-fit pointer-events-auto": "hidden"}>
                                     <p className="p-2 text-2xl">Sign Up 1/2</p>
                                     <hr />
                                     <p className="p-4 mb-2">No Information will be shown or shared publicly. Your information is only used for security purposes.</p>
@@ -236,7 +238,7 @@ function SignUp(){
                                     <button type="button" value={"Next"} onClick={SetFormSection} className="w-full bg-dark-accent-1  p-2 mt-2 rounded-lg">Next</button>
                                 </form>
 
-                                <div action="POST" form="SignUp" className={formSection == 1? "w-full h-fit pointer-events-auto": "hidden"}>
+                                <div action="POST" form="SignUp" className={formSection === 1? "w-full h-fit pointer-events-auto": "hidden"}>
                                     <p className="p-2 text-2xl">Sign Up 2/2</p>
                                     <hr />
 
@@ -272,13 +274,13 @@ function SignUp(){
                                 <div className="flex w-full justify-center -mt-4 mb-4 text-2xl">
                                     Sign In
                                 </div>
-                                <div className={formSection == 0? "justify-center":"hidden"}>
+                                <div className={formSection === 0? "justify-center":"hidden"}>
                                     {/* Sign in with google */}
                                     <form method="POST" id="signIn" className="w-full h-fit pointer-events-auto ">
                                         <div className="border-2 flex flex-wrap justify-center p-2">
                                             <h1 className="bg-gradient-to-tr from-black to-gray-900 px-3 -mt-5 w-fit"><i className="fa-brands fa-google me-1"></i> Sign in with Google</h1>
-                                            <button className="p-3 mb-2 m-1 w-full outline-none bg-white text-black">
-                                                <p className="float-left">Sign in as Jonathon</p>
+                                            <button className="p-3 mb-2 m-1 flex items-center w-full outline-none bg-white text-black">
+                                                <p className="float-left">Sign in as {'<User>'}</p>
                                                 <p className="text-xs float-left text-gray-400">Jobrogi@gmail.com</p>
                                             </button>
                                         </div>
@@ -295,7 +297,7 @@ function SignUp(){
                                         <p>Login with Us 1/2</p>
                                         <div className="border-2 flex flex-wrap justify-center p-2 mt-4">
                                             <h1 className="bg-gradient-to-tr from-black to-gray-900 px-3 -mt-5 w-fit">Username</h1>
-                                            <input id="_username" type="text" className="p-3 mb-2 m-1 w-full outline-none text-black" placeholder="Email Address" />
+                                            <input id="_username" type="text" className="p-3 mb-2 m-1 w-full outline-none text-light-text" placeholder="Username" />
                                         </div>
 
                                         <div className="flex flex-nowrap">
@@ -304,12 +306,12 @@ function SignUp(){
 
                                     </form>
                                 </div>
-                                <div className={formSection == 1? "": "hidden"}>
+                                <div className={formSection === 1? "": "hidden"}>
                                 <p>Login with Us 2/2</p>
 
                                     <div className="border-2 flex flex-wrap justify-center p-2 mt-4">
                                         <h1 className="bg-gradient-to-tr from-black to-gray-900 px-3 -mt-5 w-fit">Password</h1>
-                                        <input id="_password" type="text" className="p-3 mb-2 m-1 w-full outline-none text-black pointer-events-auto" placeholder="Enter Password" />
+                                        <input id="_password" type="text" className="p-3 mb-2 m-1 w-full outline-none text-black pointer-events-auto auto" placeholder="Enter Password" />
                                     </div>
                                     <p className="mt-2 text-gray-300">Forgot Password?</p>
 

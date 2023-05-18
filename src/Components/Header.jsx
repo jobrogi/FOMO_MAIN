@@ -1,9 +1,9 @@
 import React from "react";
-import AuthContext from './AuthContext';
+// import AuthContext from './AuthContext';
 
 
 function Header(){
-    const { isAuthenticated, user } = React.useContext(AuthContext);
+    // const { isAuthenticated, user } = React.useContext(AuthContext);
 
     return(
         <div className="p-2 w-full">

@@ -7,11 +7,15 @@ function Settings(){
     function handleLogout(){
         console.log("Logging Out");
 
-        const url = 'https://shielded-scrubland-55438.herokuapp.com/logout';
-        const local = "http://localhost:8080/logout";
+        let url;
+          if (window.location.hostname === 'localhost') {
+            url = 'http://localhost:8080/signUp';
+          } else {
+            url = 'https://shielded-scrubland-55438.herokuapp.com/signUp';
+          }
        
         
-        fetch(local, {
+        fetch(url, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'

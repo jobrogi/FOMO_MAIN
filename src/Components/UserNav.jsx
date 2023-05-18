@@ -1,20 +1,10 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import AuthContext from './AuthContext';
 
 
 function UserNav(){
     const {setCurrentPage} = React.useContext(AuthContext);
 
-    const [active, setActive] = useState(1);
-    
-    function setActiveContent(){
-        if(active == 1){
-            setActive(0);
-        }
-        if(active == 0){
-            setActive(1);
-        }
-    }
 
     return (
         // <div className="min-h-fit w-full  pointer-events-none">
@@ -22,10 +12,7 @@ function UserNav(){
         // // </div>
 
         <footer className="sticky bottom-0 min-h-fit w-full mt-2  pointer-events-none m-0">
-            <div className={active== 1 && "flex flex-wrap bg-dark-primary w-full bottom-0 px-4 py-2 transition-all duration-200"}>
-                {/* <div className="text-white text-center w-full mb-1  pointer-events-auto" >
-                {active == 1? <button className="outline-none" aria-label="Sign Up Button" onClick={setActiveContent}><i className="fa-solid fa-angle-down"></i></button> : <button className="outline-none" onClick={setActiveContent}><i className="fa-solid fa-angle-up"></i></button> }
-                </div> */}
+            <div className="flex flex-wrap bg-dark-primary w-full bottom-0 px-4 py-2 transition-all duration-200">
                 <div className="sm:flex flex flex-nowrap w-full justify-center">
                     {/* <button className="bg-blue-500 absolute bottom-0 mb-28 text-white p-2 rounded" onClick={handleLogout}>LOGOUT</button> */}
 
