@@ -3,7 +3,7 @@ import './App.css';
 
 import Header from './Components/Header';
 import Feed from './Components/Feed';
-import SignUp from './Components/SignUp';
+import BottomNav from './Components/BottomNav';
 import UserNav from './Components/UserNav'
 import AuthContext from './Components/AuthContext';
 import Profile from './Components/Profile';
@@ -12,7 +12,8 @@ import Settings from './Components/Settings';
 
 
 function App() {
-  const [currentPage, setCurrentPage] = React.useState(0);
+  const storedPage = localStorage.getItem('currentPage');
+  const [currentPage, setCurrentPage] = React.useState(storedPage ? parseInt(storedPage) : 0);
 
   const [isAuthenticated, setIsAuthenticated] = React.useState(false);
   const [user, setUser] = React.useState(null);
@@ -29,6 +30,11 @@ function App() {
       setIsAuthenticated(false);
     }
   },[]);
+
+  useEffect(() => {
+    // Store the current page in local storage
+    localStorage.setItem('currentPage', currentPage);
+  }, [currentPage]);
 
   return (
     <div className='dark:bg-dark-background min-h-screen'>
@@ -49,7 +55,7 @@ function App() {
 
 
         {/* Renders different Navbar depending if the user is authenticated or not */}
-        {!isAuthenticated &&<SignUp/>}
+        {!isAuthenticated &&<BottomNav/>}
         {isAuthenticated &&<UserNav/>}
         
       </AuthContext.Provider>
