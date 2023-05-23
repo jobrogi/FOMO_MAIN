@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import AuthContext from './AuthContext';
 
 
+
 function Profile(props){
     const {setCurrentPage} = React.useContext(AuthContext);
     const userData = JSON.parse(localStorage.getItem('userData'));
@@ -43,38 +44,39 @@ function Profile(props){
         );
       };
 
-    // function handleDeletePost(postId){
-    //     console.log("POST ID " + postId)
+    function handleDeletePost(postId){
+        console.log("POST ID " + postId)
 
-    //     let url;
-    //     if (window.location.hostname === 'localhost') {
-    //     url = 'http://localhost:8080/deletePost';
-    //     } else {
-    //     url = 'https://pacific-citadel-02863.herokuapp.com/deletePost';
-    //     }
+        let url;
+        if (window.location.hostname === 'localhost') {
+        url = 'http://localhost:8080/deletePost';
+        } else {
+        url = 'https://pacific-citadel-02863.herokuapp.com/deletePost';
+        }
 
-    //     fetch(url, {
-    //     method: 'POST',
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify({ postId, username: userData.username }),
-    //     })
-    //     .then(response => response.json())
-    //     .then(data => {
-    //         // Handle the response data
-    //         // Refresh the profile page.
+        fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ postId, username: userData.username }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Handle the response data
+            // Refresh the profile page.
 
-    //         window.location.reload();
+            window.location.reload();
 
-    //         console.log('Post deleted successfully:', data);
-    //         // Update the posts state if needed
-    //     })
-    //     .catch(error => {
-    //         // Handle the error
-    //         console.error('Error deleting post:', error);
-    //     });
-    // }
+            console.log('Post deleted successfully:', data);
+            // Update the posts state if needed
+        })
+        .catch(error => {
+            // Handle the error
+            console.error('Error deleting post:', error);
+        });
+    }
+
 
    
 
@@ -122,13 +124,13 @@ function Profile(props){
                     className="aspect-w-1 aspect-h-1 flex items-center justify-center"
                     style={{ minHeight: '200px' }} // Adjust the minimum height as needed
                     >
-                    <div className="w-full h-full">
-                        <img
-                        className="object-cover object-center h-full w-full"
-                        src={post.imageData}
-                        alt="Image"
-                        />
-                    </div>
+                        <div className="w-full h-full">
+                            <img
+                            className="object-cover object-center h-full w-full"
+                            src={post.imageData}
+                            alt="Image"
+                            />
+                        </div>
                     </div>
                 </div>
             ))}

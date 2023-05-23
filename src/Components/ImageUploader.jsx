@@ -58,12 +58,13 @@ function ImageHandler({ onImageSubmit }) {
         <p className="mt-1">
           <input
             type="file"
-            id="file-input"
+            name="file" 
+            id="fileInput"
             className="hidden"
             accept="image/*"
             onChange={handleFileInputChange}
           />
-          <label htmlFor="file-input" className="cursor-pointer text-blue-500">
+          <label htmlFor="fileInput" className="cursor-pointer text-blue-500">
             Select an image
           </label>
         </p>
