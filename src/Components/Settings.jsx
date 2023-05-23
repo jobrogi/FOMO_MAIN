@@ -32,6 +32,7 @@ function Settings(){
           });
           localStorage.removeItem('sessionId');
           localStorage.removeItem('user');
+          localStorage.setItem('currentPage', 0);
           window.location.reload()
           console.log('Logged out')
     }
