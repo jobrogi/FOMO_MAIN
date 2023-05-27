@@ -9,7 +9,7 @@ function Post(props) {
   const userData = JSON.parse(localStorage.getItem("userData"));
   const [posts, setPosts] = useState([]);
   const [likedPosts, setLikedPosts] = useState([]);
-  const [reposts, setReposts] = useState([]);
+  const [repostedPosts, setRepostedPosts] = useState([]);
   const [profileSection, setProfileSection] = useState(0);
   const [nameString, setNameString] = useState("");
 
@@ -146,18 +146,86 @@ function Post(props) {
         setLikedPosts((prevLikedPosts) => [...prevLikedPosts, postId]);
       }
     }
+    // Reposts
+    // if (type === 1) {
+    //   if (reposts.includes(postId)) {
+    //     // User has already reposted the post, so remove the repost
+    //     setPosts((prevPosts) =>
+    //       prevPosts.map((post) =>
+    //         post._id === postId ? { ...post, reposts: post.reposts - 1 } : post
+    //       )
+    //     );
+    //     setReposts((prevReposts) => prevReposts.filter((id) => id !== postId));
+    //     localStorage.removeItem(`repostedPost_${postId}`);
+
+    //     // Send the Axios POST request to update post settings for reposts
+    //     const url =
+    //       window.location.hostname === "localhost"
+    //         ? "http://localhost:8080/updateReposts"
+    //         : "https://pacific-citadel-02863.herokuapp.com/updateReposts";
+
+    //     axios
+    //       .post(url, {
+    //         postId: postId,
+    //         reposts: postToUpdate.reposts - 1,
+    //         user: userData.userId,
+    //       })
+    //       .then((response) => {
+    //         console.log("Post settings updated successfully:", response.data);
+    //       })
+    //       .catch((error) => {
+    //         console.error("Error updating post settings:", error);
+    //       });
+    //   } else {
+    //     // User has not reposted the post, so add the repost
+    //     setPosts((prevPosts) =>
+    //       prevPosts.map((post) =>
+    //         post._id === postId ? { ...post, reposts: post.reposts + 1 } : post
+    //       )
+    //     );
+    //     setReposts((prevReposts) => [...prevReposts, postId]);
+    //     localStorage.setItem(`repostedPost_${postId}`, true);
+
+    //     // Send the Axios POST request to update post settings for reposts
+    //     const url =
+    //       window.location.hostname === "localhost"
+    //         ? "http://localhost:8080/updateReposts"
+    //         : "https://pacific-citadel-02863.herokuapp.com/updateReposts";
+
+    //     axios
+    //       .post(url, {
+    //         postId: postId,
+    //         reposts: postToUpdate.reposts + 1,
+    //         user: userData.userId,
+    //       })
+    //       .then((response) => {
+    //         console.log("Post settings updated successfully:", response.data);
+    //       })
+    //       .catch((error) => {
+    //         console.error("Error updating post settings:", error);
+    //       });
+    // }
 
     // Reposts
     if (type === 1) {
-      if (reposts.includes(postId)) {
+      if (repostedPosts.includes(postId)) {
         // User has already reposted the post, so remove the repost
         setPosts((prevPosts) =>
           prevPosts.map((post) =>
-            post._id === postId ? { ...post, reposts: post.reposts - 1 } : post
+            post._id === postId
+              ? { ...post, reposts: (post.reposts || 0) - 1 }
+              : post
           )
         );
-        setReposts((prevReposts) => prevReposts.filter((id) => id !== postId));
+        setRepostedPosts((prevRepostedPosts) =>
+          prevRepostedPosts.filter((id) => id !== postId)
+        );
         localStorage.removeItem(`repostedPost_${postId}`);
+
+        // Calculate the updated total reposts
+        const updatedReposts = postToUpdate.reposts
+          ? postToUpdate.reposts - 1
+          : 0;
 
         // Send the Axios POST request to update post settings for reposts
         const url =
@@ -168,7 +236,7 @@ function Post(props) {
         axios
           .post(url, {
             postId: postId,
-            reposts: postToUpdate.reposts - 1,
+            reposts: updatedReposts,
             user: userData.userId,
           })
           .then((response) => {
@@ -181,11 +249,18 @@ function Post(props) {
         // User has not reposted the post, so add the repost
         setPosts((prevPosts) =>
           prevPosts.map((post) =>
-            post._id === postId ? { ...post, reposts: post.reposts + 1 } : post
+            post._id === postId
+              ? { ...post, reposts: (post.reposts || 0) + 1 }
+              : post
           )
         );
-        setReposts((prevReposts) => [...prevReposts, postId]);
+        setRepostedPosts((prevRepostedPosts) => [...prevRepostedPosts, postId]);
         localStorage.setItem(`repostedPost_${postId}`, true);
+
+        // Calculate the updated total reposts
+        const updatedReposts = postToUpdate.reposts
+          ? postToUpdate.reposts + 1
+          : 1;
 
         // Send the Axios POST request to update post settings for reposts
         const url =
@@ -196,7 +271,7 @@ function Post(props) {
         axios
           .post(url, {
             postId: postId,
-            reposts: postToUpdate.reposts + 1,
+            reposts: updatedReposts,
             user: userData.userId,
           })
           .then((response) => {
@@ -244,6 +319,15 @@ function Post(props) {
       key.replace("likedPost_", "")
     );
     setLikedPosts(likedPostIds);
+
+    // Retrieve reposted post IDs from local storage
+    const repostedPostKeys = Object.keys(localStorage).filter((key) =>
+      key.startsWith("repostedPost_")
+    );
+    const repostedPostIds = repostedPostKeys.map((key) =>
+      key.replace("repostedPost_", "")
+    );
+    setRepostedPosts(repostedPostIds);
   }, []);
 
   useEffect(() => {
@@ -307,8 +391,7 @@ function Post(props) {
                   />
                 </div>
                 <ul className="text-gray-400 flex w-full max-h-full mt-2 justify-end">
-                  {/* <li onClick={()=>{togglePostSettings(post._id)}} className='px-2 '  ><i className={`${likedPosts.includes(post._id) ? 'text-red-500 fa-solid fa-heart me-1' : 'fa-solid fa-heart me-1'}`}></i> {post.likes === undefined ? 0 : post.likes}</li> */}
-
+                  {/* Like Button */}
                   <li
                     onClick={() => {
                       togglePostSettings(post._id, 0);
@@ -321,14 +404,17 @@ function Post(props) {
                     {post.likes && post.likes ? post.likes : 0}
                   </li>
 
+                  {/* Repost Button */}
                   <li
-                    className="px-2"
                     onClick={() => {
-                      togglePostSettings(post._id);
+                      togglePostSettings(post._id, 1);
                     }}
+                    className={`px-2 ${
+                      repostedPosts.includes(post._id) ? "text-blue-500" : ""
+                    }`}
                   >
                     <i className="fa-solid fa-retweet me-1"></i>{" "}
-                    {post.reposts === undefined ? "0" : post.reposts}
+                    {post.reposts && post.reposts ? post.reposts : 0}
                   </li>
                 </ul>
               </div>
