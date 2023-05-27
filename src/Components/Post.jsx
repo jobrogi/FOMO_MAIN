@@ -1,44 +1,343 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import AuthContext from "./AuthContext";
 import data from "../UserData.json";
+import axios from "axios";
+import PostDesc from "./Post/PostDesc";
 
-function Post(){
-    return(
-        <div className="flex w-full sm:justify-center">
-            <div className="flex w-full flex-wrap mt-2 sm:w-3/4 md:w-1/2 lg:w-2/6 sm:border-gray-600 sm:border-s-2 sm:border-e-2 sm:p-2">
-            
-            {data.map((data) => (
-                <div className="w-full" key={data.id}>
-                    {/* Profile Image, Profile Username, Post Description */}
-                    <div className="flex w-full flex-nowrap mt-2">
-                        <img className="object-cover w-16 h-16 rounded-full" src={data.ProfileImg} alt="" />
+function Post(props) {
+  const { setCurrentPage } = React.useContext(AuthContext);
+  const userData = JSON.parse(localStorage.getItem("userData"));
+  const [posts, setPosts] = useState([]);
+  const [likedPosts, setLikedPosts] = useState([]);
+  const [reposts, setReposts] = useState([]);
+  const [profileSection, setProfileSection] = useState(0);
+  const [nameString, setNameString] = useState("");
 
-                        <div className="ms-2">
-                            <h1 className=" text-white font-bold w-full">{data.Name}</h1>
-                            <p className="text-white">{data.PostDesc}</p>
-                        </div>
-                    </div>
+  useEffect(() => {
+    const userData = localStorage.getItem("userData");
+    // console.log(userData);
+    const { route } = props;
 
-                    {/* Post Image or Video / Post Interactions */}
-                    <div className="flex flex-wrap ms-16 mt-2 w-fit ">
-                        <img className="rounded-xl min-w-full object-fit" src={data.PostImg} alt="" />
-                        <ul className="flex w-full justify-evenly mt-1">
-                            <li className="text-white"><i className="fa-solid fa-heart"></i> {data.Likes}</li>
-                            <li className="text-white"><i className="fa-solid fa-comment"></i> {data.Comments}</li>
-                            <li className="text-white"><i className="fa-solid fa-share"></i></li>
-                        </ul>
-                    </div>
-                    
+    let url;
+    if (window.location.hostname === "localhost") {
+      url = "http://localhost:8080" + route;
+    } else {
+      url = "https://pacific-citadel-02863.herokuapp.com" + route;
+    }
 
-                    <hr className="border-gray-600  mt-2 w-full"/>
-                    
-                </div>
-                
+    // console.log("WITHOUT PARAMS " + route);
+    // console.log(props.route);
 
-                ))}
-            </div>
-        </div>
-        
+    // Append user data as query parameters to the URL
+    const urlWithParams = new URL(url);
+    // console.log("WITH PARAMS " + urlWithParams);
+    urlWithParams.searchParams.append("userData", userData);
+
+    fetch(urlWithParams)
+      .then((response) => response.json())
+      .then((data) => {
+        if (route === "/getUserLikedPosts") {
+        } else {
+          console.log(data);
+
+          setPosts(data); // Update the state with the received posts
+        }
+        // Handle the response data
+        setPosts(data); // Update the state with the received posts
+      })
+      .catch((error) => {
+        // Handle the error
+      });
+  }, []); // Add any dependencies that should trigger the fetch request
+
+  const togglePostSettings = (postId, type) => {
+    const postToUpdate = posts.find((post) => post._id === postId);
+    console.log("Post ID: " + postId);
+
+    // Like
+    if (type === 0) {
+      if (likedPosts.includes(postId)) {
+        // User has already liked the post, so remove the like
+        setPosts((prevPosts) =>
+          prevPosts.map((post) =>
+            post._id === postId
+              ? {
+                  ...post,
+                  likes: (post.likes || 0) - 1,
+                }
+              : post
+          )
+        );
+        console.log("ONE");
+        setLikedPosts((prevLikedPosts) =>
+          prevLikedPosts.filter((id) => id !== postId)
+        );
+        localStorage.removeItem(`likedPost_${postId}`);
+
+        // Calculate the updated total likes
+        const updatedLikes = postToUpdate.likes ? postToUpdate.likes - 1 : 0;
+
+        // Send the Axios POST request to update post settings
+        let url;
+        if (window.location.hostname === "localhost") {
+          url = "http://localhost:8080/updateLikes";
+        } else {
+          url = "https://pacific-citadel-02863.herokuapp.com/updateLikes";
+        }
+
+        axios
+          .post(url, {
+            postId: postId,
+            likes: updatedLikes,
+            user: userData.userId,
+          }) // Include the postId and updatedLikes in the data payload
+          .then((response) => {
+            // Handle the response if needed
+            console.log("Post settings updated successfully:", response.data);
+          })
+          .catch((error) => {
+            // Handle the error
+            console.error("Error updating post settings:", error);
+          });
+      } else {
+        console.log("TWO");
+
+        // User has not liked the post, so add the like
+        setPosts((prevPosts) =>
+          prevPosts.map((post) =>
+            post._id === postId
+              ? {
+                  ...post,
+                  likes: (post.likes || 0) + 1,
+                }
+              : post
+          )
+        );
+
+        // Calculate the updated total likes
+        const updatedLikes = postToUpdate.likes ? postToUpdate.likes + 1 : 1;
+
+        // Store the liked post ID in local storage
+        localStorage.setItem(`likedPost_${postId}`, true);
+
+        // Send the Axios POST request to update post settings
+        let url;
+        if (window.location.hostname === "localhost") {
+          url = "http://localhost:8080/updateLikes";
+        } else {
+          url = "https://pacific-citadel-02863.herokuapp.com/updateLikes";
+        }
+
+        axios
+          .post(url, {
+            postId: postId,
+            likes: updatedLikes,
+            user: userData.userId,
+          }) // Include the postId and updatedLikes in the data payload
+          .then((response) => {
+            // Handle the response if needed
+            console.log("Post settings updated successfully:", response.data);
+          })
+          .catch((error) => {
+            // Handle the error
+            console.error("Error updating post settings:", error);
+          });
+
+        setLikedPosts((prevLikedPosts) => [...prevLikedPosts, postId]);
+      }
+    }
+
+    // Reposts
+    if (type === 1) {
+      if (reposts.includes(postId)) {
+        // User has already reposted the post, so remove the repost
+        setPosts((prevPosts) =>
+          prevPosts.map((post) =>
+            post._id === postId ? { ...post, reposts: post.reposts - 1 } : post
+          )
+        );
+        setReposts((prevReposts) => prevReposts.filter((id) => id !== postId));
+        localStorage.removeItem(`repostedPost_${postId}`);
+
+        // Send the Axios POST request to update post settings for reposts
+        const url =
+          window.location.hostname === "localhost"
+            ? "http://localhost:8080/updateReposts"
+            : "https://pacific-citadel-02863.herokuapp.com/updateReposts";
+
+        axios
+          .post(url, {
+            postId: postId,
+            reposts: postToUpdate.reposts - 1,
+            user: userData.userId,
+          })
+          .then((response) => {
+            console.log("Post settings updated successfully:", response.data);
+          })
+          .catch((error) => {
+            console.error("Error updating post settings:", error);
+          });
+      } else {
+        // User has not reposted the post, so add the repost
+        setPosts((prevPosts) =>
+          prevPosts.map((post) =>
+            post._id === postId ? { ...post, reposts: post.reposts + 1 } : post
+          )
+        );
+        setReposts((prevReposts) => [...prevReposts, postId]);
+        localStorage.setItem(`repostedPost_${postId}`, true);
+
+        // Send the Axios POST request to update post settings for reposts
+        const url =
+          window.location.hostname === "localhost"
+            ? "http://localhost:8080/updateReposts"
+            : "https://pacific-citadel-02863.herokuapp.com/updateReposts";
+
+        axios
+          .post(url, {
+            postId: postId,
+            reposts: postToUpdate.reposts + 1,
+            user: userData.userId,
+          })
+          .then((response) => {
+            console.log("Post settings updated successfully:", response.data);
+          })
+          .catch((error) => {
+            console.error("Error updating post settings:", error);
+          });
+      }
+    }
+  };
+  function handleDeletePost(postId) {
+    let url = "http://localhost:8080/deletePost";
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ postId, username: userData.username }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // Handle the response data
+        // Refresh the profile page.
+
+        window.location.reload();
+
+        console.log("Post deleted successfully:", data);
+        // Update the posts state if needed
+      })
+      .catch((error) => {
+        // Handle the error
+        console.error("Error deleting post:", error);
+      });
+  }
+
+  // Component initialization
+  // Checks to see if you liked any of the posts so far.
+  useEffect(() => {
+    // Retrieve liked post IDs from local storage
+    const likedPostKeys = Object.keys(localStorage).filter((key) =>
+      key.startsWith("likedPost_")
     );
+    const likedPostIds = likedPostKeys.map((key) =>
+      key.replace("likedPost_", "")
+    );
+    setLikedPosts(likedPostIds);
+  }, []);
+
+  useEffect(() => {
+    var userFirstName = userData.fName;
+    userFirstName =
+      userFirstName.charAt(0).toUpperCase() + userFirstName.slice(1);
+
+    var userLastName = userData.lName;
+    userLastName = userLastName.charAt(0).toUpperCase() + userLastName.slice(1);
+    // console.log(userFirstName + ' ' + userLastName)
+    setNameString(userFirstName + " " + userLastName);
+  }, []);
+
+  return (
+    <div>
+      {posts
+        .slice()
+        .reverse()
+        .map((post) => (
+          <div className="w-full flex flex-wrap my-5" key={post._id}>
+            <div className="w-full flex flex-wrap my-5" key={post._id}>
+              <div className="w-full min-h-fit h-fit flex flex-wrap relative">
+                <div className="absolute -top-4 right-0 text-2xl p-2 text-dark-text">
+                  <ul className="flex items-center">
+                    <li className="px-2 text-gray-400">
+                      <i className="fa-solid fa-ellipsis"></i>
+                    </li>
+                    <li
+                      onClick={() => {
+                        handleDeletePost(post._id);
+                      }}
+                      className="px-2 text-sm text-gray-400"
+                    >
+                      <i className="fa-solid fa-trash"></i>
+                    </li>
+                  </ul>
+                </div>
+
+                <ul className="flex w-full h-fit mb-2">
+                  <li className="">
+                    <div className="w-10 h-10 rounded-full bg-white"></div>
+                  </li>
+                  <li className="ms-3 align-center">
+                    <ul className="text-sm flex">
+                      <li className="font-bold text-white">{nameString}</li>
+                      <li className="ms-1 text-xs text-gray-400">
+                        @{userData.username}
+                      </li>
+                    </ul>
+                    <div className="text-white whitespace-wrap">
+                      <PostDesc fullText={post.postDesc} />
+                    </div>
+                  </li>
+                </ul>
+                {/* <div className="w-10 h-10 rounded-full bg-white"></div> */}
+                <div className="flex w-full max-h-full justify-end">
+                  <img
+                    className="object-cover object-center max-h-full w-3/4"
+                    src={post.imageData}
+                    alt="Image"
+                  />
+                </div>
+                <ul className="text-gray-400 flex w-full max-h-full mt-2 justify-end">
+                  {/* <li onClick={()=>{togglePostSettings(post._id)}} className='px-2 '  ><i className={`${likedPosts.includes(post._id) ? 'text-red-500 fa-solid fa-heart me-1' : 'fa-solid fa-heart me-1'}`}></i> {post.likes === undefined ? 0 : post.likes}</li> */}
+
+                  <li
+                    onClick={() => {
+                      togglePostSettings(post._id, 0);
+                    }}
+                    className={`px-2 ${
+                      likedPosts.includes(post._id) ? "text-red-500" : ""
+                    }`}
+                  >
+                    <i className="fa-solid fa-heart me-1"></i>
+                    {post.likes && post.likes ? post.likes : 0}
+                  </li>
+
+                  <li
+                    className="px-2"
+                    onClick={() => {
+                      togglePostSettings(post._id);
+                    }}
+                  >
+                    <i className="fa-solid fa-retweet me-1"></i>{" "}
+                    {post.reposts === undefined ? "0" : post.reposts}
+                  </li>
+                </ul>
+              </div>
+              {/* <hr className='bg-white w-full mt-3' /> */}
+            </div>
+          </div>
+        ))}
+    </div>
+  );
 }
 
 export default Post;

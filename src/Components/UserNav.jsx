@@ -1,30 +1,68 @@
 import React from "react";
-import AuthContext from './AuthContext';
+import AuthContext from "./AuthContext";
 
+function UserNav(props) {
+  const { setCurrentPage } = React.useContext(AuthContext);
 
-function UserNav(){
-    const {setCurrentPage} = React.useContext(AuthContext);
+  return (
+    // <div className="min-h-fit w-full  pointer-events-none">
 
+    // // </div>
 
-    return (
-        // <div className="min-h-fit w-full  pointer-events-none">
-            
-        // // </div>
+    <div className="sticky bottom-0 w-full mt-10">
+      <div className="flex flex-wrap bg-black w-full bottom-0 px-4 transition-all duration-200">
+        <div className="sm:flex flex flex-nowrap w-full justify-center">
+          <ul className="w-full h-full flex text-center">
+            <li
+              className={
+                props.currentPage === 0
+                  ? "w-1/2 h-fit py-3 bg-dark-accent-1"
+                  : "w-1/2 h-fit py-3"
+              }
+              onClick={() => {
+                setCurrentPage(0);
+              }}
+            >
+              <button className="text-dark-text text-sm">
+                <i className="fa-solid fa-house"></i>
+              </button>
+            </li>
 
-        <footer className="sticky bottom-0 min-h-fit w-full mt-2  pointer-events-none m-0">
-            <div className="flex flex-wrap bg-dark-primary w-full bottom-0 px-4 py-2 transition-all duration-200">
-                <div className="sm:flex flex flex-nowrap w-full justify-center">
-                    {/* <button className="bg-blue-500 absolute bottom-0 mb-28 text-white p-2 rounded" onClick={handleLogout}>LOGOUT</button> */}
-
-                    <ul className="text-white flex items-center pointer-events-auto">
-                        <li className="-me-3"><button className="bg-dark-border text-dark-text pe-4 p-2 rounded text-sm" onClick={()=>{setCurrentPage(0)}}>HOME</button></li>
-                        <li className="relative z-20"><button className="bg-dark-accent-1 w-12 h-12 p-2 rounded-full text-xl" onClick={()=>{setCurrentPage(2)}} ><h1 className="text-xl mb-2">+</h1></button></li>
-                        <li className="-ms-3"><button className="bg-dark-border text-dark-text ps-4 p-2 rounded text-sm" onClick={()=>{setCurrentPage(1)}}>Profile</button></li>
-                    </ul>
-                </div>
+            <li
+              className={
+                props.currentPage === 1
+                  ? "w-1/2 h-fit py-3 bg-dark-accent-1"
+                  : "w-1/2 h-fit py-3"
+              }
+              onClick={() => {
+                setCurrentPage(1);
+              }}
+            >
+              {" "}
+              <button className="text-dark-text text-sm">
+                <i className="fa-solid fa-user"></i>
+              </button>
+            </li>
+          </ul>
+          {props.currentPage === 2 ? (
+            <div></div>
+          ) : (
+            <div>
+              <button
+                className="bg-dark-accent-1 w-16 h-16 rounded-full absolute bottom-16 right-5"
+                onClick={() => {
+                  setCurrentPage(2);
+                }}
+              >
+                {" "}
+                <i className="fa-solid fa-plus text-dark-text text-xl"></i>
+              </button>
             </div>
-        </footer>
-    )
+          )}
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default UserNav;
