@@ -12,6 +12,9 @@ module.exports = {
         GoogleRed: "#DB4437",
         GoogleBlue: "#4285F4",
       },
+      spacing: {
+        120: "500px",
+      },
     },
   },
   variants: {
