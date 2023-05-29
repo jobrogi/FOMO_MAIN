@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import ImageHandler from "./ImageUploader";
 import AuthContext from "../AuthContext";
-import axios from "axios";
 import ImageResizer from "react-image-file-resizer";
-import { resolvePath } from "react-router-dom";
 
 function AddPost() {
   const [imageData, setImageData] = useState("");
@@ -24,7 +22,7 @@ function AddPost() {
               500,
               500,
               "JPEG",
-              50,
+              90,
               0,
               (uri) => {
                 resolve(uri);
@@ -191,15 +189,13 @@ function AddPost() {
   return (
     // Purpose of this page is to add post to user account and also
     <div className="w-full min-h-screen mt-5">
-      <h1 className="text-dark-text text-2xl text-center">Create Post</h1>
+      <h1 className="text-white text-2xl text-center">Create Post</h1>
       <div className=" p-4 m-5">
         <ImageHandler onImageSubmit={handleImageSubmission} />
       </div>
 
       <div className=" p-4 m-5 border text-center rounded flex flex-wrap justify-center">
-        <p className="text-dark-text w-full">
-          Now Lets add a Post Description!
-        </p>
+        <p className="text-white w-full">Now Lets add a Post Description!</p>
         <textarea
           name="postDesc"
           id="postDesc"
@@ -210,7 +206,7 @@ function AddPost() {
       </div>
       <button
         onClick={handlePost}
-        className="px-4 py-2 bg-dark-accent-1 rounded float-right me-5"
+        className="px-4 py-2 bg-Green rounded text-white float-right me-5"
       >
         Post
       </button>

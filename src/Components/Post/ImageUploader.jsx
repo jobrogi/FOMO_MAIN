@@ -52,7 +52,7 @@ function ImageHandler({ onImageSubmit }) {
           className={`mx-auto h-32 ${imageSrc ? "" : "hidden"}`}
         />
       </div>
-      <div className="text-sm text-center p-2 pb-4">
+      <div className="text-sm text-white text-center p-2 pb-4">
         <p className="text-dark-text">Drag and drop an image here</p>
         <p className="mt-1 text-gray-500">or</p>
         <p className="mt-1">

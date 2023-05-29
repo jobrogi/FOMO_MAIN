@@ -11,11 +11,12 @@ function Header() {
     <div className="z-20 w-full sticky top-0 bg-black">
       {/* Top Menu with search bar and hamburger icon */}
       <ul className="flex items-center justify-center">
-        <li className="flex w-1/4 justify-center">
+        <li className="flex px-4 w-fit justify-between">
           <button
             onClick={() => {
               headerMenuActive(!headerMenu);
             }}
+            className="w-fit"
           >
             <i className="fa-solid fa-bars text-3xl text-White"></i>
           </button>
@@ -30,7 +31,7 @@ function Header() {
             className="w-full outline-none h-8 text-center rounded-s-xl text-md decoration"
             placeholder="..."
           />
-          <button className="w-16 bg-Green placeholder-white text-dark-text h-8 text-center rounded-e-xl text-md decoration">
+          <button className="w-16 bg-Green placeholder-white text-white h-8 text-center rounded-e-xl text-md decoration">
             <i className="fa-solid fa-magnifying-glass"></i>
           </button>
           {/* {isAuthenticated && <p className="text-white">Welcome, {user.username}!</p>} */}
@@ -39,16 +40,16 @@ function Header() {
 
       {/* Menu Left */}
       {headerMenu === true && (
-        <div className="absolute top-0 left-0 w-screen h-screen z-20">
+        <div className="absolute top-0 left-0 w-full h-screen z-20">
           {/* Button if they press off the nav screen */}
           <button
-            className="w-screen h-screen"
+            className="w-full h-full"
             onClick={() => {
               headerMenuActive(!headerMenu);
             }}
           ></button>
           {/* Another Hamburger Button to close the nav screen */}
-          <div className="bg-black w-3/4 h-screen absolute top-0 z-30 shadow-2xl shadow-black flex flex-col flex-wrap justify-start p-2">
+          <div className="bg-black w- md:w-1/4 lg:w-64 h-screen absolute top-0 z-30 shadow-2xl shadow-black flex flex-col flex-wrap justify-start p-2">
             <div className="flex w-full flex-nowrap h-fit justify-between items-center">
               <ul className="w-3/4 h-fit">
                 <li>

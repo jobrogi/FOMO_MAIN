@@ -51,8 +51,10 @@ function Profile(props) {
           </div>
 
           <div
-            className="bg-white flex min-h-fit w-20 h-20 rounded-full absolute -bottom-10 left-5 flex-wrap"
-            onClick={EditUserProfile}
+            className="bg-white flex min-h-fit w-20 h-20 rounded-full absolute -bottom-10 left-5 flex-wrap hover:cursor-pointer"
+            onClick={() => {
+              setCurrentPage(5);
+            }}
           >
             {/* If image display image if not display add image */}
             <div className="w-full h-full flex flex-wrap justify-center items-center ">
