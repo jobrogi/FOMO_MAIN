@@ -1,5 +1,5 @@
 import React from "react";
-import AuthContext from "./AuthContext";
+import AuthContext from "../AuthContext";
 
 function Settings() {
   function handleLogout() {
@@ -40,14 +40,14 @@ function Settings() {
         onClick={() => {
           setCurrentPage(1);
         }}
-        className="p-2 text-dark-text text-2xl"
+        className="p-2 text-white text-2xl"
       >
         <i className="fa-solid fa-arrow-left"></i>
       </button>
       <ul className="p-2 w-full flex flex-nowrap">
         <li
           onClick={handleLogout}
-          className="bg-dark-primary w-full text-dark-text p-2 flex flex-nowrap"
+          className="bg-dark-primary w-full text-white p-2 flex flex-nowrap"
         >
           Sign Out{" "}
           <div className="ms-auto">

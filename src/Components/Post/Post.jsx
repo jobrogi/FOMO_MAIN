@@ -1,22 +1,26 @@
 import React, { useEffect, useState } from "react";
-import AuthContext from "./AuthContext";
-import data from "../UserData.json";
+import AuthContext from "../AuthContext";
 import axios from "axios";
-import PostDesc from "./Post/PostDesc";
+import PostDesc from "./PostDesc";
+import LikeButton from "./LikeButton";
+import { updateLikes, updateReposts } from "./PostRequests";
 
 function Post(props) {
-  const { setCurrentPage } = React.useContext(AuthContext);
+  // USER SIGNED IN HERE
   const userData = JSON.parse(localStorage.getItem("userData"));
+  const [nameString, setNameString] = useState("");
+
+  // POSTS GIVEN FROM SERVER END
   const [posts, setPosts] = useState([]);
   const [likedPosts, setLikedPosts] = useState([]);
   const [repostedPosts, setRepostedPosts] = useState([]);
-  const [profileSection, setProfileSection] = useState(0);
-  const [nameString, setNameString] = useState("");
+  const [myProfile, setMyProfile] = useState(false);
 
   useEffect(() => {
     const userData = localStorage.getItem("userData");
     // console.log(userData);
     const { route } = props;
+    console.log("ROUTE: " + route);
 
     let url;
     if (window.location.hostname === "localhost") {
@@ -25,13 +29,26 @@ function Post(props) {
       url = "https://pacific-citadel-02863.herokuapp.com" + route;
     }
 
-    // console.log("WITHOUT PARAMS " + route);
-    // console.log(props.route);
-
     // Append user data as query parameters to the URL
     const urlWithParams = new URL(url);
-    // console.log("WITH PARAMS " + urlWithParams);
-    urlWithParams.searchParams.append("userData", userData);
+    if (
+      route === "/getUserPosts" ||
+      route === "/getUserLikedPosts" ||
+      route === "/getUserReposts"
+    ) {
+      console.log("Did it here");
+      setMyProfile(true);
+      urlWithParams.searchParams.append("userData", userData);
+    } else {
+      console.log("WE DID IT");
+      setMyProfile(false);
+      // it is another user not the user logged in: pass the props.userData
+      urlWithParams.searchParams.append(
+        "userData",
+        JSON.stringify(props.userData)
+      );
+      console.log(props.userData);
+    }
 
     fetch(urlWithParams)
       .then((response) => response.json())
@@ -52,7 +69,6 @@ function Post(props) {
 
   const togglePostSettings = (postId, type) => {
     const postToUpdate = posts.find((post) => post._id === postId);
-    console.log("Post ID: " + postId);
 
     // Like
     if (type === 0) {
@@ -350,7 +366,13 @@ function Post(props) {
           <div className="w-full flex flex-wrap my-5" key={post._id}>
             <div className="w-full flex flex-wrap my-5" key={post._id}>
               <div className="w-full min-h-fit h-fit flex flex-wrap relative">
-                <div className="absolute -top-4 right-0 text-2xl p-2 text-dark-text">
+                <div
+                  className={
+                    myProfile === true
+                      ? "absolute -top-4 right-0 text-2xl p-2 text-dark-text"
+                      : "hidden"
+                  }
+                >
                   <ul className="flex items-center">
                     <li className="px-2 text-gray-400">
                       <i className="fa-solid fa-ellipsis"></i>
@@ -365,16 +387,18 @@ function Post(props) {
                     </li>
                   </ul>
                 </div>
-
                 <ul className="flex w-full h-fit mb-2">
                   <li className="">
                     <div className="w-10 h-10 rounded-full bg-white"></div>
                   </li>
                   <li className="ms-3 align-center">
                     <ul className="text-sm flex">
-                      <li className="font-bold text-white">{nameString}</li>
+                      <li className="font-bold text-white">
+                        {" "}
+                        {post.user.fName + " " + post.user.lName}
+                      </li>
                       <li className="ms-1 text-xs text-gray-400">
-                        @{userData.username}
+                        @{post.user.username}
                       </li>
                     </ul>
                     <div className="text-white whitespace-wrap">

@@ -112,27 +112,27 @@ function SignUpButton(props) {
         <form
           method="POST"
           id="SignUp"
-          className="w-full h-fit pointer-events-auto text-black"
+          className="w-full h-fit pointer-events-auto text-White mt-20"
         >
           <div>
-            <p className="p-2 text-2xl text-dark-text">Sign Up 1/2</p>
+            <p className="p-2 text-2xl text-White">Sign Up 1/2</p>
             <button
               type="button"
               value="Close"
               onClick={SetFormSection}
-              className="text-dark-text absolute top-0 right-0 p-2"
+              className="text-White absolute top-0 right-0 p-2"
             >
               X
             </button>
           </div>
           <hr />
-          <p className="p-4 mb-2 text-dark-text">
+          <p className="p-4 mb-2 White">
             No Information will be shown or shared publicly. Your information is
             only used for security purposes.
           </p>
 
           <div className="border-2 flex flex-wrap justify-center p-2">
-            <h1 className="bg-black text-dark-text px-3 -mt-5 w-fit">
+            <h1 className="bg-black text-White px-3 -mt-5 w-fit">
               First and Last Name
             </h1>
             <div className="flex flex-nowrap w-full">
@@ -176,7 +176,7 @@ function SignUpButton(props) {
             type="button"
             value={"Next"}
             onClick={SetFormSection}
-            className="w-full bg-dark-accent-1  p-2 mt-2 rounded-lg"
+            className="w-full bg-Green  p-2 mt-2 rounded-lg"
           >
             Next
           </button>
@@ -193,13 +193,13 @@ function SignUpButton(props) {
             : "hidden"
         }
       >
-        <div>
-          <p className="p-2 text-2xl text-dark-text">Sign Up 2/2</p>
+        <div className="mt-20">
+          <p className="p-2 text-2xl text-White">Sign Up 2/2</p>
           <button
             type="button"
             value="Close"
             onClick={SetFormSection}
-            className="text-dark-text absolute top-0 right-0 p-2"
+            className="text-White absolute top-0 right-0 p-2"
           >
             X
           </button>
@@ -207,10 +207,10 @@ function SignUpButton(props) {
 
         <hr />
 
-        <p className="mt-2 mb-1 text-center font-bold text-dark-text">
+        <p className="mt-2 mb-1 text-center font-bold text-White">
           Username & Password Tips
         </p>
-        <ul className="p-2 text-dark-text">
+        <ul className="p-2 text-White">
           <li>Avoid sensitive personal info.</li>
           <li>Do not include profanity in your username.</li>
           <li>Simple to remember but difficult to guess. </li>
@@ -219,7 +219,7 @@ function SignUpButton(props) {
           </li>
         </ul>
         <div className="border-2 flex flex-wrap justify-center p-2 mt-4">
-          <h1 className="bg-black text-dark-text px-3 -mt-5 w-fit">Username</h1>
+          <h1 className="bg-black text-White px-3 -mt-5 w-fit">Username</h1>
           <input
             form="SignUp"
             type="text"
@@ -230,7 +230,7 @@ function SignUpButton(props) {
         </div>
 
         <div className="border-2 flex flex-wrap justify-center p-2 mt-4">
-          <h1 className="bg-black text-dark-text px-3 -mt-5 w-fit">Password</h1>
+          <h1 className="bg-black text-White px-3 -mt-5 w-fit">Password</h1>
           <input
             form="SignUp"
             type="password"
@@ -246,7 +246,7 @@ function SignUpButton(props) {
             type="button"
             value={"Back"}
             onClick={SetFormSection}
-            className="w-1/2 bg-dark-accent-1 p-2 mt-2 m-2 rounded-lg"
+            className="w-1/2 bg-Green p-2 mt-2 m-2 rounded-lg text-White"
           >
             Back
           </button>
@@ -254,7 +254,7 @@ function SignUpButton(props) {
             form="SignUp"
             type="submit"
             onClick={handleSignUp}
-            className="w-1/2 bg-dark-accent-1  p-2 mt-2 m-2 rounded-lg"
+            className="w-1/2 bg-Green text-White  p-2 mt-2 m-2 rounded-lg"
           >
             Submit
           </button>

@@ -15,7 +15,7 @@ function BottomNav() {
         }
       >
         {/* Down Arrow to enable and disable the bottom nav component */}
-        <div className="text-white text-center w-full mb-1">
+        <div className="text-White text-center w-full mb-1">
           {active === true ? (
             <button
               className="outline-none"
@@ -47,8 +47,8 @@ function BottomNav() {
           }
         >
           <div className="sm:flex flex flex-nowrap w-full justify-center">
-            <SignUpButton button="text-dark-text bg-dark-accent-1 rounded text-xl p-1 px-2 m-2" />
-            <SignInButton button="text-dark-text border-2 border-dark-accent-1 rounded text-xl p-1 px-2 m-2" />
+            <SignUpButton button="text-White bg-Green rounded text-xl p-1 px-2 m-2" />
+            <SignInButton button="text-White border-2 border-Green rounded text-xl p-1 px-2 m-2" />
           </div>
         </div>
       </div>

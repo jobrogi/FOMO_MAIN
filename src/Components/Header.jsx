@@ -8,7 +8,7 @@ function Header() {
   const [headerMenu, headerMenuActive] = useState(false);
 
   return (
-    <div className="z-20 w-full sticky top-0 bg-dark-background">
+    <div className="z-20 w-full sticky top-0 bg-black">
       {/* Top Menu with search bar and hamburger icon */}
       <ul className="flex items-center justify-center">
         <li className="flex w-1/4 justify-center">
@@ -17,7 +17,7 @@ function Header() {
               headerMenuActive(!headerMenu);
             }}
           >
-            <i className="fa-solid fa-bars text-3xl text-dark-text"></i>
+            <i className="fa-solid fa-bars text-3xl text-White"></i>
           </button>
         </li>
         {/* <li>
@@ -30,7 +30,7 @@ function Header() {
             className="w-full outline-none h-8 text-center rounded-s-xl text-md decoration"
             placeholder="..."
           />
-          <button className="w-16 bg-dark-accent-1 placeholder-white text-dark-text h-8 text-center rounded-e-xl text-md decoration">
+          <button className="w-16 bg-Green placeholder-white text-dark-text h-8 text-center rounded-e-xl text-md decoration">
             <i className="fa-solid fa-magnifying-glass"></i>
           </button>
           {/* {isAuthenticated && <p className="text-white">Welcome, {user.username}!</p>} */}
@@ -48,11 +48,11 @@ function Header() {
             }}
           ></button>
           {/* Another Hamburger Button to close the nav screen */}
-          <div className="bg-dark-background w-3/4 h-screen absolute top-0 z-30 shadow-2xl shadow-black flex flex-col flex-wrap justify-start p-2">
+          <div className="bg-black w-3/4 h-screen absolute top-0 z-30 shadow-2xl shadow-black flex flex-col flex-wrap justify-start p-2">
             <div className="flex w-full flex-nowrap h-fit justify-between items-center">
               <ul className="w-3/4 h-fit">
                 <li>
-                  <div className="text-dark-text text-4xl font-bold hover:cursor-pointer text-center w-full h-fit">
+                  <div className="text-White text-4xl font-bold hover:cursor-pointer text-center w-full h-fit">
                     ByteMe
                   </div>
                 </li>
@@ -63,26 +63,26 @@ function Header() {
                   headerMenuActive(!headerMenu);
                 }}
               >
-                <i className="h-fit fa-solid fa-bars text-3xl text-dark-text float-left"></i>
+                <i className="h-fit fa-solid fa-bars text-3xl text-White float-left"></i>
               </button>
             </div>
 
             <ul className="flex flex-wrap w-full justify-center mt-8 ">
               {/* Later make the items have a bg color based on which page is showing at the time */}
-              <li className="text-xl text-dark-text w-full text-center p-2">
+              <li className="text-xl text-White w-full text-center p-2">
                 <button>Home</button>
               </li>
-              <li className="text-xl text-dark-text w-full text-center p-2">
+              <li className="text-xl text-White w-full text-center p-2">
                 <button>Profile</button>
               </li>
-              <li className="text-xl text-dark-text w-full text-center p-2">
+              <li className="text-xl text-White w-full text-center p-2">
                 <button>Settings</button>
               </li>
 
               {/* Sign in and Sign Up Page */}
               <div className="mt-4 w-full">
-                <SignUpButton button="text-xl text-dark-text w-full text-center p-2 bg-dark-accent-1 rounded" />
-                <SignInButton button="text-xl text-dark-text w-full text-center p-2 border-2 border-dark-accent-1 rounded mt-2" />
+                <SignUpButton button="text-xl text-White w-full text-center p-2 bg-Green rounded" />
+                <SignInButton button="text-xl text-White w-full text-center p-2 border-2 border-Green rounded mt-2" />
               </div>
             </ul>
           </div>

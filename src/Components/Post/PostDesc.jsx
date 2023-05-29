@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 function PostDescription({ fullText }) {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -14,14 +14,18 @@ function PostDescription({ fullText }) {
     <div>
       {shouldTruncate ? (
         <span>
-          {truncatedText}...{' '}
-          <button className='underline' onClick={toggleExpand}>Read more</button>
+          {truncatedText}...{" "}
+          <button className="underline" onClick={toggleExpand}>
+            Read more
+          </button>
         </span>
       ) : (
         <span>
-          {fullText}{' '}
+          {fullText}{" "}
           {isExpanded && (
-            <button className='underline' onClick={toggleExpand}>Show less</button>
+            <button className="underline" onClick={toggleExpand}>
+              Show less
+            </button>
           )}
         </span>
       )}
@@ -30,4 +34,3 @@ function PostDescription({ fullText }) {
 }
 
 export default PostDescription;
-

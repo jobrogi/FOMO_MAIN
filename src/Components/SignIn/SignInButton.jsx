@@ -74,7 +74,7 @@ function SignInButton(props) {
   }
 
   return (
-    <div>
+    <div className="">
       <button
         onClick={() => {
           setFormSection(1);
@@ -113,22 +113,23 @@ function SignInButton(props) {
             </button>
           </div>
 
-          <div className={formSection === 1 ? "justify-center" : "hidden"}>
+          <div className={formSection === 1 ? "justify-center mt-1" : "hidden"}>
             {/* Sign in with google */}
             <form
               method="POST"
               id="signIn"
               className="w-full h-fit pointer-events-auto "
             >
-              <div className="border-2 flex flex-wrap justify-center p-2">
-                <h1 className="bg-black text-dark-text px-3 -mt-5 w-fit">
-                  <i className="fa-brands fa-google me-1"></i> Sign in with
-                  Google
-                </h1>
-                <button className="p-3 mb-2 m-1 flex items-center w-full outline-none bg-white text-black">
-                  <p className="float-left">Sign in as {"<User>"}</p>
-                  <p className="text-xs float-left text-gray-400">
-                    Jobrogi@gmail.com
+              <div className="flex flex-wrap justify-center p-2">
+                <button
+                  className="p-1 rounded mb-2 m-1 flex items-center w-full outline-none bg-GoogleBlue text-black"
+                  aria-label="Sign In With Google"
+                >
+                  <div className="bg-White p-2 rounded">
+                    <i className="fa-brands fa-google text-GoogleRed text-xl"></i>
+                  </div>
+                  <p className="text-xl float-left text-White flex w-full justify-center">
+                    Sign in with Google
                   </p>
                 </button>
               </div>
@@ -154,7 +155,7 @@ function SignInButton(props) {
                 <input
                   id="_username"
                   type="text"
-                  className="p-3 mb-2 m-1 w-full outline-none text-light-text"
+                  className="p-3 mb-2 m-1 w-full outline-none text-black"
                   placeholder="Username"
                 />
               </div>
@@ -179,7 +180,7 @@ function SignInButton(props) {
                   form="SignIn"
                   type="submit"
                   onClick={handleLogIn}
-                  className="w-full bg-dark-accent-1 p-2 mt-2 m-2 rounded-lg"
+                  className="w-full bg-Green p-2 mt-2 m-2 rounded-lg"
                 >
                   Submit
                 </button>

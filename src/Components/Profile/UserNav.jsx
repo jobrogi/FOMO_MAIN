@@ -1,9 +1,8 @@
-import React from "react";
-import AuthContext from "./AuthContext";
+import React, { useState } from "react";
+import AuthContext from "../AuthContext";
 
 function UserNav(props) {
-  const { setCurrentPage } = React.useContext(AuthContext);
-
+  const { setCurrentPage, setCurrentRoute } = React.useContext(AuthContext);
   return (
     // <div className="min-h-fit w-full  pointer-events-none">
 
@@ -13,33 +12,50 @@ function UserNav(props) {
       <div className="flex flex-wrap bg-black w-full bottom-0 px-4 transition-all duration-200">
         <div className="sm:flex flex flex-nowrap w-full justify-center">
           <ul className="w-full h-full flex text-center">
+            {/* Home or Feed Tab */}
             <li
               className={
                 props.currentPage === 0
-                  ? "w-1/2 h-fit py-3 bg-dark-accent-1"
-                  : "w-1/2 h-fit py-3"
+                  ? "w-1/3 h-fit py-3 bg-Green"
+                  : "w-1/3 h-fit py-3"
               }
               onClick={() => {
                 setCurrentPage(0);
               }}
             >
-              <button className="text-dark-text text-sm">
+              <button className="text-White text-sm">
                 <i className="fa-solid fa-house"></i>
               </button>
             </li>
-
+            {/* Search tab */}
+            <li
+              className={
+                props.currentPage === 4
+                  ? "w-1/3 h-fit py-3 bg-Green"
+                  : "w-1/3 h-fit py-3"
+              }
+              // onClick={() => {
+              //   setCurrentPage(4);
+              // }}
+            >
+              {" "}
+              <button className="text-white text-sm">
+                <i className="fa-solid fa-magnifying-glass"></i>
+              </button>
+            </li>
+            {/* Profile tab */}
             <li
               className={
                 props.currentPage === 1
-                  ? "w-1/2 h-fit py-3 bg-dark-accent-1"
-                  : "w-1/2 h-fit py-3"
+                  ? "w-1/3 h-fit py-3 bg-Green"
+                  : "w-1/3 h-fit py-3"
               }
               onClick={() => {
                 setCurrentPage(1);
               }}
             >
               {" "}
-              <button className="text-dark-text text-sm">
+              <button className="text-white text-sm">
                 <i className="fa-solid fa-user"></i>
               </button>
             </li>
@@ -49,7 +65,7 @@ function UserNav(props) {
           ) : (
             <div>
               <button
-                className="bg-dark-accent-1 w-16 h-16 rounded-full absolute bottom-16 right-5"
+                className="bg-Green text-white w-16 h-16 rounded-full absolute bottom-16 right-5"
                 onClick={() => {
                   setCurrentPage(2);
                 }}

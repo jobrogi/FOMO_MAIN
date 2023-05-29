@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import AuthContext from "./AuthContext";
+import AuthContext from "../AuthContext";
 // import axios from "axios";
-import Post from "./Post";
+import Post from "../Post/Post";
 
-function Profile() {
+function Profile(props) {
   const { setCurrentPage } = React.useContext(AuthContext);
   const userData = JSON.parse(localStorage.getItem("userData"));
-  const [posts, setPosts] = useState([]);
+  // const [posts, setPosts] = useState([]);
   const [nameString, setNameString] = useState("");
 
   const [profileSection, setProfileSection] = useState(0);
@@ -16,9 +16,9 @@ function Profile() {
 
     let url;
     if (window.location.hostname === "localhost") {
-      url = "http://localhost:8080/getUserPosts";
+      url = "http://localhost:8080" + props.route;
     } else {
-      url = "https://pacific-citadel-02863.herokuapp.com/getUserPosts";
+      url = "https://pacific-citadel-02863.herokuapp.com" + props.route;
     }
     // Append user data as query parameters to the URL
     const urlWithParams = new URL(url);
@@ -28,7 +28,7 @@ function Profile() {
       .then((response) => response.json())
       .then((data) => {
         // Handle the response data
-        setPosts(data); // Update the state with the received posts
+        // setPosts(data); // Update the state with the received posts
       })
       .catch((error) => {
         // Handle the error
@@ -38,20 +38,20 @@ function Profile() {
   function EditUserProfile() {}
 
   return (
-    <div className=" min-h-screen w-full relative z-0">
+    <div className="min-h-screen w-full relative z-0">
       <div className="min-h-fit w-full p-3">
         <div className="bg-black w-full min-h-fit h-32 relative">
           <div
             onClick={() => {
               setCurrentPage(3);
             }}
-            className="w-full flex justify-end text-2xl p-2 text-dark-text"
+            className="w-full flex justify-end text-2xl p-2 text-white"
           >
             <i className="fa-solid fa-ellipsis"></i>
           </div>
 
           <div
-            className="bg-dark-text flex min-h-fit w-20 h-20 rounded-full absolute -bottom-10 left-5 flex-wrap"
+            className="bg-white flex min-h-fit w-20 h-20 rounded-full absolute -bottom-10 left-5 flex-wrap"
             onClick={EditUserProfile}
           >
             {/* If image display image if not display add image */}
