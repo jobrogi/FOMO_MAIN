@@ -1,90 +1,169 @@
-import React, { useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import ImageResizer from "react-image-file-resizer";
+import axios from "axios";
+import AuthContext from "../AuthContext";
+
+// const userData = JSON.parse(localStorage.getItem("userData") || "{}");
+const userData = localStorage.getItem("userData");
 
 function ChangeProfile() {
-  const fName = useRef(null);
+  useEffect(() => {
+    console.log(userData);
+  }, []);
 
-  function SaveProfileChanges(e) {
-    e.preventDefault();
-    const inputValue = fName.current.value;
-    console.log(inputValue);
-    console.log("recieved");
-    if (fName.current) {
-      //   console.log(fName);
-    }
-  }
-  const handleImage = (file) => {
+  const [profilePicture, setProfilePicture] = useState(null);
+  const [previewURL, setPreviewURL] = useState(null);
+  const { setCurrentPage, setCurrentRoute } = React.useContext(AuthContext);
+
+  const fName = useRef(null);
+  const lName = useRef(null);
+  const profileDesc = useRef(null);
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setProfilePicture(file);
+
     const reader = new FileReader();
-    reader.onload = (event) => {
-      const imageData = event.target.result;
-      console.log(imageData);
-      //   setImageSrc(imageData); // Update the image source with imageData
-      // Call the onImageSubmit callback function provided by the parent component
-      //   onImageSubmit(file, imageData);
+    reader.onloadend = () => {
+      setPreviewURL(reader.result);
     };
     reader.readAsDataURL(file);
   };
 
-  const handleFileInputChange = (event) => {
-    const file = event.target.files[0];
-    handleImage(file);
-  };
-  return (
-    <div className="w-full min-h-screen">
-      <h1 className="text-center text-2xl text-white mb-2">Profile</h1>
-      <ul className="w-full h-fit justify-center px-2 align-baseline">
-        <li className="flex w-full text-white">
-          <div className="w-fit">
-            <div className="w-16 h-16 rounded-full bg-white"></div>
-          </div>
-          <div className="ps-2 w-full max-w-full">
-            <div>@Username</div>
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    const inputFName = fName.current.value;
+    const inputLName = lName.current.value;
+    const inputDesc = profileDesc.current.value;
+    const inputImage = profilePicture;
 
+    const resizedImage = await new Promise((resolve) => {
+      ImageResizer.imageFileResizer(
+        inputImage,
+        500,
+        500,
+        "JPEG",
+        10,
+        0,
+        (uri) => {
+          resolve(uri);
+        },
+        "base64"
+      );
+    });
+
+    // Make Post Request to change user Data.
+
+    let url;
+    if (window.location.hostname === "localhost") {
+      url = "http://localhost:8080/changeUserData";
+    } else {
+      url = "https://pacific-citadel-02863.herokuapp.com/changeUserData";
+    }
+    const data = JSON.parse(userData);
+    console.log(data);
+    axios
+      .post(url, {
+        fName: inputFName,
+        lName: inputLName,
+        profileDesc: inputDesc,
+        profileImage: resizedImage,
+        data: data,
+      })
+      .then((response) => {
+        const updatedUserData = {
+          fName: inputFName,
+          lName: inputLName,
+          email: response.data.user.email,
+          username: response.data.user.username,
+          userId: data.userId,
+        };
+        console.log("HERE" + JSON.stringify(updatedUserData));
+
+        const userProfileImage = response.data.user.profileImage;
+        localStorage.setItem(
+          "userProfileImage",
+          JSON.stringify(userProfileImage)
+        );
+        // console.log(response.data.user);
+
+        localStorage.setItem("userData", JSON.stringify(updatedUserData));
+        setCurrentPage(1);
+      })
+      .catch((error) => {
+        console.log("err: " + error);
+      });
+  };
+
+  return (
+    <form onSubmit={handleFormSubmit} className="max-w-md mx-auto">
+      <div className="mb-4">
+        <div className="w-full flex items-center">
+          <div className="me-2">
+            {previewURL && (
+              <img className="w-16 h-16 rounded-full" src={previewURL} alt="" />
+            )}
+          </div>
+          <div className="">
+            <label
+              className="block mb-2 font-bold text-white"
+              htmlFor="profilePicture"
+            >
+              Profile Picture
+            </label>
             <input
               type="file"
-              name="file"
-              id="fileInput"
-              className="hidden"
-              accept="image/*"
-              onChange={handleFileInputChange}
-            />
-            <label htmlFor="fileInput" className="cursor-pointer text-blue-500">
-              Change Profile Imagea
-            </label>
-            <p>
-              <textarea
-                name="Profile Description"
-                className="max-h-fit text-white bg-transparent"
-                id=""
-                cols="30"
-                rows="5"
-              ></textarea>
-            </p>
-          </div>
-        </li>
-        <li>
-          {" "}
-          <div className="w-full flex mt-2 ">
-            <input
-              type="text"
-              placeholder="First Name"
-              className="m-2 w-1/2 p-1 rounded"
-              ref={fName}
-            />
-            <input
-              type="text"
-              placeholder="Last Name"
-              className="m-2 w-1/2 p-1 rounded"
+              id="profilePicture"
+              onChange={handleImageChange}
+              className="border w-full border-gray-300 text-white p-2 rounded-md"
             />
           </div>
-        </li>
-        <button
-          onClick={SaveProfileChanges}
-          className="p-1 rounded text-white bg-Green float-right me-2 mt-2"
+        </div>
+      </div>
+      <div className="mb-4">
+        <label className="block mb-2 font-bold text-white" htmlFor="fName">
+          First Name
+        </label>
+        <input
+          type="text"
+          id="fName"
+          ref={fName}
+          className="border border-gray-300 p-2 rounded-md w-full"
+          placeholder={userData.fName}
+        />
+      </div>
+      <div className="mb-4">
+        <label className="block mb-2 font-bold text-white" htmlFor="lName">
+          Last Name
+        </label>
+        <input
+          type="text"
+          id="lName"
+          ref={lName}
+          className="border border-gray-300 p-2 rounded-md w-full"
+          placeholder={userData.lName}
+        />
+      </div>
+      <div className="mb-4">
+        <label
+          className="block mb-2 font-bold text-white"
+          htmlFor="profileDesc"
         >
-          Save Changes
-        </button>
-      </ul>
-    </div>
+          Profile Description
+        </label>
+        <textarea
+          id="profileDesc"
+          ref={profileDesc}
+          className="border border-gray-300 p-2 rounded-md w-full"
+        ></textarea>
+      </div>
+      <button
+        type="submit"
+        className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
+      >
+        Save Changes
+      </button>
+    </form>
   );
 }
 

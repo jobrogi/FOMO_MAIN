@@ -34,20 +34,22 @@ function SignInButton(props) {
         }
       })
       .then((data) => {
+        console.log("DATA" + data.user._id);
         const userData = {
-          fName: data.user[0].fName,
-          lName: data.user[0].lName,
-          email: data.user[0].email,
-          username: data.user[0].username,
-          userId: data.user[0]._id,
+          fName: data.user.fName,
+          lName: data.user.lName,
+          email: data.user.email,
+          username: data.user.username,
+          userId: data.user._id,
         };
+        localStorage.setItem("userData", JSON.stringify(userData));
 
         localStorage.setItem("sessionId", data.sessionId);
-        localStorage.setItem("userData", JSON.stringify(userData));
+        localStorage.setItem("userId", data.user._id);
 
         // console.log(localStorage.getItem("userData"));
         setIsAuthenticated(true);
-        setUser(userData);
+        // setUser(userData);
         setCurrentPage(1);
       })
       .catch((error) => {

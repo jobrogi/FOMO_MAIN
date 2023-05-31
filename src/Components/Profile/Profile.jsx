@@ -1,41 +1,18 @@
 import React, { useEffect, useState } from "react";
 import AuthContext from "../AuthContext";
-// import axios from "axios";
+import axios from "axios";
 import Post from "../Post/Post";
 
 function Profile(props) {
   const { setCurrentPage } = React.useContext(AuthContext);
   const userData = JSON.parse(localStorage.getItem("userData"));
-  // const [posts, setPosts] = useState([]);
-  const [nameString, setNameString] = useState("");
-
-  const [profileSection, setProfileSection] = useState(0);
+  const userProfileImage = JSON.parse(localStorage.getItem("userProfileImage"));
 
   useEffect(() => {
-    const userData = localStorage.getItem("userData");
+    console.log("USER DATA ON PROFILE " + userData);
+  }, []);
 
-    let url;
-    if (window.location.hostname === "localhost") {
-      url = "http://localhost:8080" + props.route;
-    } else {
-      url = "https://pacific-citadel-02863.herokuapp.com" + props.route;
-    }
-    // Append user data as query parameters to the URL
-    const urlWithParams = new URL(url);
-    urlWithParams.searchParams.append("userData", userData);
-
-    fetch(urlWithParams)
-      .then((response) => response.json())
-      .then((data) => {
-        // Handle the response data
-        // setPosts(data); // Update the state with the received posts
-      })
-      .catch((error) => {
-        // Handle the error
-      });
-  }, []); // Add any dependencies that should trigger the fetch request
-
-  function EditUserProfile() {}
+  const [profileSection, setProfileSection] = useState(0);
 
   return (
     <div className="min-h-screen w-full relative z-0">
@@ -58,13 +35,23 @@ function Profile(props) {
           >
             {/* If image display image if not display add image */}
             <div className="w-full h-full flex flex-wrap justify-center items-center ">
-              <i className="fa-solid fa-image text-2xl font-bold w-full text-center text-gray-500"></i>
+              {userProfileImage && (
+                <img
+                  className=" w-20 h-20 rounded-full "
+                  src={userProfileImage}
+                  alt=""
+                />
+              )}
+
+              {/* <i className="fa-solid fa-image text-2xl font-bold w-full text-center text-gray-500"></i> */}
             </div>
+            {/* User Name and Users Name */}
             <h1 className="mt-1 text-2xl font-bold text-dark-text w-full">
-              {nameString}
+              {/* {nameString} */}
             </h1>
-            <h1 className="text-md text-gray-400 w-full">
-              @{userData.username}
+            <h1 className="text-md text-gray-400 w-full whitespace-nowrap">
+              {"@" + userData.username}
+              <div>{userData.fName + " " + userData.lName}</div>
             </h1>
           </div>
         </div>

@@ -6,7 +6,7 @@ function BottomNav() {
   const [active, setActive] = useState(true);
 
   return (
-    <div className="min-h-fit w-full bottom-0 fixed">
+    <div className="min-h-fit w-full bottom-0 left-0 fixed">
       <div
         className={
           active === true

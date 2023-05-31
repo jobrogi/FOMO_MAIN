@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
-import AuthContext from "../AuthContext";
 import axios from "axios";
 import PostDesc from "./PostDesc";
-import LikeButton from "./LikeButton";
-import { updateLikes, updateReposts } from "./PostRequests";
 
 function Post(props) {
   // USER SIGNED IN HERE
-  const userData = JSON.parse(localStorage.getItem("userData"));
+  const userData = localStorage.getItem("userData");
+
   const [nameString, setNameString] = useState("");
 
   // POSTS GIVEN FROM SERVER END
@@ -18,9 +16,9 @@ function Post(props) {
 
   useEffect(() => {
     const userData = localStorage.getItem("userData");
+
     // console.log(userData);
     const { route } = props;
-    console.log("ROUTE: " + route);
 
     let url;
     if (window.location.hostname === "localhost") {
@@ -29,43 +27,25 @@ function Post(props) {
       url = "https://pacific-citadel-02863.herokuapp.com" + route;
     }
 
-    // Append user data as query parameters to the URL
-    const urlWithParams = new URL(url);
-    if (
-      route === "/getUserPosts" ||
-      route === "/getUserLikedPosts" ||
-      route === "/getUserReposts"
-    ) {
-      console.log("Did it here");
-      setMyProfile(true);
-      urlWithParams.searchParams.append("userData", userData);
-    } else {
-      console.log("WE DID IT");
-      setMyProfile(false);
-      // it is another user not the user logged in: pass the props.userData
-      urlWithParams.searchParams.append(
-        "userData",
-        JSON.stringify(props.userData)
-      );
-      console.log(props.userData);
-    }
+    const requestData = {
+      userData:
+        route === "/getUserPosts" ||
+        route === "/getUserLikedPosts" ||
+        route === "/getUserReposts"
+          ? JSON.parse(userData) // Parse the userData string back into an object
+          : props.userData,
+    };
 
-    fetch(urlWithParams)
-      .then((response) => response.json())
-      .then((data) => {
-        if (route === "/getUserLikedPosts") {
-        } else {
-          console.log(data);
-
-          setPosts(data); // Update the state with the received posts
-        }
-        // Handle the response data
-        setPosts(data); // Update the state with the received posts
+    axios
+      .post(url, requestData)
+      .then((response) => {
+        console.log("Response data:", response.data);
+        setPosts(response.data);
       })
       .catch((error) => {
-        // Handle the error
+        console.error("Error fetching data:", error);
       });
-  }, []); // Add any dependencies that should trigger the fetch request
+  }, []);
 
   const togglePostSettings = (postId, type) => {
     const postToUpdate = posts.find((post) => post._id === postId);
@@ -100,12 +80,13 @@ function Post(props) {
         } else {
           url = "https://pacific-citadel-02863.herokuapp.com/updateLikes";
         }
+        const parsedData = JSON.parse(userData);
 
         axios
           .post(url, {
             postId: postId,
             likes: updatedLikes,
-            user: userData.userId,
+            userId: parsedData.userId,
           }) // Include the postId and updatedLikes in the data payload
           .then((response) => {
             // Handle the response if needed
@@ -117,6 +98,7 @@ function Post(props) {
           });
       } else {
         console.log("TWO");
+        console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + userData);
 
         // User has not liked the post, so add the like
         setPosts((prevPosts) =>
@@ -143,12 +125,13 @@ function Post(props) {
         } else {
           url = "https://pacific-citadel-02863.herokuapp.com/updateLikes";
         }
-
+        const parsedData = JSON.parse(userData);
+        console.log(parsedData.userId);
         axios
           .post(url, {
             postId: postId,
             likes: updatedLikes,
-            user: userData.userId,
+            userId: parsedData.userId,
           }) // Include the postId and updatedLikes in the data payload
           .then((response) => {
             // Handle the response if needed
@@ -162,65 +145,6 @@ function Post(props) {
         setLikedPosts((prevLikedPosts) => [...prevLikedPosts, postId]);
       }
     }
-    // Reposts
-    // if (type === 1) {
-    //   if (reposts.includes(postId)) {
-    //     // User has already reposted the post, so remove the repost
-    //     setPosts((prevPosts) =>
-    //       prevPosts.map((post) =>
-    //         post._id === postId ? { ...post, reposts: post.reposts - 1 } : post
-    //       )
-    //     );
-    //     setReposts((prevReposts) => prevReposts.filter((id) => id !== postId));
-    //     localStorage.removeItem(`repostedPost_${postId}`);
-
-    //     // Send the Axios POST request to update post settings for reposts
-    //     const url =
-    //       window.location.hostname === "localhost"
-    //         ? "http://localhost:8080/updateReposts"
-    //         : "https://pacific-citadel-02863.herokuapp.com/updateReposts";
-
-    //     axios
-    //       .post(url, {
-    //         postId: postId,
-    //         reposts: postToUpdate.reposts - 1,
-    //         user: userData.userId,
-    //       })
-    //       .then((response) => {
-    //         console.log("Post settings updated successfully:", response.data);
-    //       })
-    //       .catch((error) => {
-    //         console.error("Error updating post settings:", error);
-    //       });
-    //   } else {
-    //     // User has not reposted the post, so add the repost
-    //     setPosts((prevPosts) =>
-    //       prevPosts.map((post) =>
-    //         post._id === postId ? { ...post, reposts: post.reposts + 1 } : post
-    //       )
-    //     );
-    //     setReposts((prevReposts) => [...prevReposts, postId]);
-    //     localStorage.setItem(`repostedPost_${postId}`, true);
-
-    //     // Send the Axios POST request to update post settings for reposts
-    //     const url =
-    //       window.location.hostname === "localhost"
-    //         ? "http://localhost:8080/updateReposts"
-    //         : "https://pacific-citadel-02863.herokuapp.com/updateReposts";
-
-    //     axios
-    //       .post(url, {
-    //         postId: postId,
-    //         reposts: postToUpdate.reposts + 1,
-    //         user: userData.userId,
-    //       })
-    //       .then((response) => {
-    //         console.log("Post settings updated successfully:", response.data);
-    //       })
-    //       .catch((error) => {
-    //         console.error("Error updating post settings:", error);
-    //       });
-    // }
 
     // Reposts
     if (type === 1) {
@@ -249,11 +173,13 @@ function Post(props) {
             ? "http://localhost:8080/updateReposts"
             : "https://pacific-citadel-02863.herokuapp.com/updateReposts";
 
+        const parsedData = JSON.parse(userData);
+        console.log(parsedData.userId);
         axios
           .post(url, {
             postId: postId,
             reposts: updatedReposts,
-            user: userData.userId,
+            userId: parsedData.userId,
           })
           .then((response) => {
             console.log("Post settings updated successfully:", response.data);
@@ -283,12 +209,13 @@ function Post(props) {
           window.location.hostname === "localhost"
             ? "http://localhost:8080/updateReposts"
             : "https://pacific-citadel-02863.herokuapp.com/updateReposts";
+        const parsedData = JSON.parse(userData);
 
         axios
           .post(url, {
             postId: postId,
             reposts: updatedReposts,
-            user: userData.userId,
+            userId: parsedData.userId,
           })
           .then((response) => {
             console.log("Post settings updated successfully:", response.data);
@@ -300,7 +227,13 @@ function Post(props) {
     }
   };
   function handleDeletePost(postId) {
-    let url = "http://localhost:8080/deletePost";
+    let url;
+    if (window.location.hostname === "localhost") {
+      url = "http://localhost:8080/deletePost";
+    } else {
+      url = "https://pacific-citadel-02863.herokuapp.com/deletePost";
+    }
+
     fetch(url, {
       method: "POST",
       headers: {
@@ -344,17 +277,6 @@ function Post(props) {
       key.replace("repostedPost_", "")
     );
     setRepostedPosts(repostedPostIds);
-  }, []);
-
-  useEffect(() => {
-    var userFirstName = userData.fName;
-    userFirstName =
-      userFirstName.charAt(0).toUpperCase() + userFirstName.slice(1);
-
-    var userLastName = userData.lName;
-    userLastName = userLastName.charAt(0).toUpperCase() + userLastName.slice(1);
-    // console.log(userFirstName + ' ' + userLastName)
-    setNameString(userFirstName + " " + userLastName);
   }, []);
 
   return (

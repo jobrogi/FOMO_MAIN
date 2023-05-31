@@ -44,11 +44,21 @@ function SignUpButton(props) {
         })
         .then((data) => {
           const userData = {
-            fName: data.user[0].fName,
-            lName: data.user[0].lName,
-            email: data.user[0].email,
-            username: data.user[0].username,
+            fName: data.user.fName,
+            lName: data.user.lName,
+            email: data.user.email,
+            username: data.user.username,
+            userId: data.user._id,
           };
+          console.log(userData);
+          // DATA CHANGED AT SIGN IN LIKE THIS
+          // const userData = {
+          //   fName: data.user[0].fName,
+          //   lName: data.user[0].lName,
+          //   email: data.user[0].email,
+          //   username: data.user[0].username,
+          //   userId: data.user[0]._id,
+          // };
           console.log("DATA " + data);
           localStorage.setItem("sessionId", data.sessionId);
           localStorage.setItem("userData", JSON.stringify(userData));

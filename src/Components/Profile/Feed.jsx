@@ -5,8 +5,6 @@ import PostDesc from "../Post/PostDesc";
 import LikeButton from "../Post/LikeButton";
 function Feed() {
   const [posts, setPosts] = useState([]);
-  const userData = JSON.parse(localStorage.getItem("userData"));
-  const [likedPosts, setLikedPosts] = useState([]);
   const [repostedPosts, setRepostedPosts] = useState([]);
   const { setCurrentPage, setCurrentRoute } = React.useContext(AuthContext);
 
@@ -107,7 +105,7 @@ function Feed() {
                       >
                         @{post.user.username}
                         <div className="w-full">
-                          {post.user.fName + " " + post.user.lName}
+                          {/* {post.user.fName + " " + post.user.lName} */}
                         </div>
                       </li>
                     </ul>
