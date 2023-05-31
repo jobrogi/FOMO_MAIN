@@ -30,7 +30,6 @@ function App() {
     if (userToken) {
       // User is authenticated
       setIsAuthenticated(true);
-      // console.log(localStorage.getItem('userData'))
     } else {
       // User is not authenticated
       setIsAuthenticated(false);
