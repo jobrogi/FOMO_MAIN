@@ -57,7 +57,11 @@ function Feed() {
               <div className="flex justify-start ">
                 {/* PROFILE IMAGE*/}
                 <div className="h-full pe-2">
-                  <div className="w-12 h-12 bg-white rounded-full"></div>
+                  <div className="w-12 h-12 bg-black rounded-full">
+                    {/* Need to figure out why image will only show up after log in. */}
+                    <img src={post.user.imageData} alt="User Profile Picture" />
+                    {console.log(post)}
+                  </div>
                 </div>
 
                 <div className="w-full text-white">
