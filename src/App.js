@@ -62,9 +62,7 @@ function App() {
         {/* When User is !isAuthenticated, feed will show random of users that are either trending or show public profile. */}
         {/* When User isAuthenticated, feed will firstly For you page. This prevents users that have no followers from having no content to watch */}
         <div className=" w-full h-fit xl:px-96 2xl:px-120">
-          {currentPage === 0 && (
-            <Feed user={localStorage.getItem("userData")} />
-          )}
+          {currentPage === 0 && <Feed />}
           {currentPage === 1 && <Profile route="/getUserPosts" />}
           {currentPage === 2 && <AddPost />}
           {currentPage === 3 && <Settings />}
@@ -74,7 +72,8 @@ function App() {
             <UserNav currentRoute={currentRoute} currentPage={currentPage} />
           )}
 
-          {!isAuthenticated && <BottomNav />}
+          {/* Getting rid of: */}
+          {/* {!isAuthenticated && <BottomNav />} */}
         </div>
       </AuthContext.Provider>
     </div>
