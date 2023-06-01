@@ -14,8 +14,6 @@ function AddPost() {
         const { file } = imageData;
         const reader = new FileReader();
         reader.onloadend = async function () {
-          const convertedBase64Data = reader.result;
-
           const resizedImage = await new Promise((resolve) => {
             ImageResizer.imageFileResizer(
               file,
@@ -31,7 +29,6 @@ function AddPost() {
             );
           });
 
-          //   sendPostData(convertedBase64Data);
           sendPostData(resizedImage);
         };
         reader.readAsDataURL(file);

@@ -2,7 +2,7 @@ import React from "react";
 import AuthContext from "../AuthContext";
 
 function UserNav(props) {
-  const { setCurrentPage, setCurrentRoute } = React.useContext(AuthContext);
+  const { setCurrentPage } = React.useContext(AuthContext);
   return (
     // <div className="min-h-fit w-full  pointer-events-none">
 

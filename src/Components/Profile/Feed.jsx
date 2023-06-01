@@ -6,7 +6,7 @@ import WelcomeSignUp from "../SignUp/WelcomeSignUp";
 import WelcomeSignIn from "../SignIn/WelcomeSignIn";
 function Feed() {
   const [posts, setPosts] = useState([]);
-  const [repostedPosts, setRepostedPosts] = useState([]);
+  const [repostedPosts] = useState([]);
   const { isAuthenticated } = useContext(AuthContext);
 
   useEffect(() => {
@@ -79,7 +79,7 @@ function Feed() {
                       <img
                         className=" w-500 h-full rounded object-cover"
                         src={post.imageData}
-                        alt="IMAGE POSTED"
+                        alt=" POSTED"
                       />
                     </div>
                   </div>

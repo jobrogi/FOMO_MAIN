@@ -1,6 +1,4 @@
-import React, { useState } from "react";
-import SignInButton from "./SignIn/SignInButton";
-import SignUpButton from "./SignUp/SignUpButton";
+import React from "react";
 // import AuthContext from './AuthContext';
 
 function Header() {
