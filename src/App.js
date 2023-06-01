@@ -9,7 +9,7 @@ import AuthContext from "./Components/AuthContext";
 import Profile from "./Components/Profile/Profile";
 import AddPost from "./Components/Post/AddPost";
 import Settings from "./Components/Profile/Settings";
-import UserProfiles from "./Components/UserProfiles";
+import UserProfiles from "./Components/Profile/UserProfiles";
 import ChangeProfile from "./Components/Profile/ChangeProfile";
 
 function App() {
@@ -61,7 +61,7 @@ function App() {
         {/* User should only be able to interact when isAuthenticated. */}
         {/* When User is !isAuthenticated, feed will show random of users that are either trending or show public profile. */}
         {/* When User isAuthenticated, feed will firstly For you page. This prevents users that have no followers from having no content to watch */}
-        <div className=" w-full h-fit xl:px-96 2xl:px-120">
+        <div className="">
           {currentPage === 0 && <Feed />}
           {currentPage === 1 && <Profile route="/getUserPosts" />}
           {currentPage === 2 && <AddPost />}
@@ -72,8 +72,7 @@ function App() {
             <UserNav currentRoute={currentRoute} currentPage={currentPage} />
           )}
 
-          {/* Getting rid of: */}
-          {/* {!isAuthenticated && <BottomNav />} */}
+          {!isAuthenticated && <BottomNav />}
         </div>
       </AuthContext.Provider>
     </div>

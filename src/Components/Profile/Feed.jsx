@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import AuthContext from "../AuthContext";
 import axios from "axios";
-import PostDesc from "../Post/PostDesc";
 import LikeButton from "../Post/LikeButton";
+import WelcomeSignUp from "../SignUp/WelcomeSignUp";
+import WelcomeSignIn from "../SignIn/WelcomeSignIn";
 function Feed() {
   const [posts, setPosts] = useState([]);
   const [repostedPosts, setRepostedPosts] = useState([]);
-  const { setCurrentPage, setCurrentRoute } = React.useContext(AuthContext);
+  const { isAuthenticated } = useContext(AuthContext);
 
   useEffect(() => {
     // const userData = localStorage.getItem("userData");
@@ -30,124 +31,93 @@ function Feed() {
         console.error("Error updating post settings:", error);
       });
   }, []);
-  const [active, setActive] = useState(true);
-
-  function setActiveButton(e) {
-    setActive(e.target.value);
-  }
 
   return (
-    <div className="p-2">
-      <ul className="flex flex-nowrap justify-center ">
-        <li
-          onClick={setActiveButton}
-          value={0}
-          className={
-            active === 0
-              ? "text-xl text-white transition-all duration-200 mx-10"
-              : "text-white text-lg transition-all duration-200 mx-8"
-          }
-        >
-          Following
-        </li>
-
-        {/* <li className="text-white">Following</li> */}
-        <li
-          onClick={setActiveButton}
-          value={1}
-          className={
-            active === 1
-              ? "text-xl text-white transition-all duration-200 mx-10"
-              : "text-white text-lg transition-all duration-200 mx-8"
-          }
-        >
-          For You
-        </li>
-      </ul>
-      {posts
-        .slice()
-        .reverse()
-        .map((post) => (
-          <div className="w-full flex flex-wrap my-5" key={post._id}>
-            <div className="w-full flex flex-wrap my-5" key={post._id}>
-              <div className="w-full min-h-fit h-fit flex flex-wrap relative">
-                <div className="absolute -top-4 right-0 text-2xl p-2 text-dark-text">
-                  {/* Only show if the user logged in made this post */}
-
-                  <ul className="flex items-center">
-                    {/* <li className="px-2 text-gray-400">
-                      <i className="fa-solid fa-ellipsis"></i>
-                    </li> */}
-                    {/* <li
-                      onClick={() => {
-                        // handleDeletePost(post._id);
-                      }}
-                      className="px-2 text-sm text-gray-400"
-                    >
-                      <i className="fa-solid fa-trash"></i>
-                    </li> */}
-                  </ul>
+    <div className="flex w-full">
+      <div
+        className={
+          !isAuthenticated
+            ? "p-2 flex flex-wrap w-fit sm:w-3/4 md:w-11/12 lg:w-4/6"
+            : "p-2 flex flex-wrap sm:w-3/4 md:w-11/12 lg:w-11/12"
+        }
+      >
+        {posts
+          .slice()
+          .reverse()
+          .map((post) => (
+            <div
+              className={
+                !isAuthenticated
+                  ? "mt-5 ms-32 w-full flex"
+                  : "mt-5 justify-center w-full flex"
+              }
+              key={post._id}
+            >
+              {/* IF user not logged in show this:  */}
+              <div className="flex justify-start ">
+                {/* PROFILE IMAGE*/}
+                <div className="h-full pe-2">
+                  <div className="w-12 h-12 bg-white rounded-full"></div>
                 </div>
 
-                <ul className="flex w-full h-fit mb-2">
-                  <li className="">
-                    <div className="w-10 h-10 rounded-full bg-white"></div>
-                  </li>
-                  <li className="ms-3 align-center">
-                    <ul className="text-sm flex">
-                      {/* <li className="font-bold text-white">{nameString}</li> */}
+                <div className="w-full text-white">
+                  {/* USERNAME / NAME */}
+                  <div className="flex">
+                    <h1 className="whitespace-nowrap font-bold">
+                      {post.user.fName + " " + post.user.lName}
+                    </h1>
+                    <h1 className="text-gray-400">@{post.user.username}</h1>
+                  </div>
+
+                  {/* DESC */}
+                  <h1 className="text-sm mb-2">
+                    This is my description of my post! Testing for length now!
+                  </h1>
+                  {/* Post Image */}
+                  <div className="flex items-center min-w-230">
+                    <div className="max-w-500 border-white">
+                      <img
+                        className=" w-500 h-full rounded object-cover"
+                        src={post.imageData}
+                        alt="IMAGE POSTED"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Interactions / Like Button / Repost Button */}
+                  <div className="w-full ">
+                    <ul className="flex">
+                      <LikeButton
+                        postId={post._id}
+                        initialLikes={post.likes || 0}
+                      />
+
                       <li
-                        className="ms-1 text-xs text-gray-400"
                         onClick={() => {
-                          setCurrentRoute(post.user);
-                          setCurrentPage(4);
+                          // togglePostSettings(post._id, 1);
                         }}
+                        className={`px-2 ${
+                          repostedPosts.includes(post._id)
+                            ? "text-blue-500"
+                            : ""
+                        }`}
                       >
-                        @{post.user.username}
-                        <div className="w-full">
-                          {/* {post.user.fName + " " + post.user.lName} */}
-                        </div>
+                        <i className="fa-solid fa-retweet me-1"></i>{" "}
+                        {post.reposts && post.reposts ? post.reposts : 0}
                       </li>
                     </ul>
-                    <div className="text-white whitespace-wrap">
-                      <PostDesc fullText={post.postDesc} />
-                    </div>
-                  </li>
-                </ul>
-                {/* <div className="w-10 h-10 rounded-full bg-white"></div> */}
-                <div className="flex w-full max-h-full justify-end">
-                  <img
-                    className="object-cover object-center max-h-full w-3/4"
-                    src={post.imageData}
-                    alt="Image"
-                  />
+                  </div>
                 </div>
-                <ul className="text-gray-400 flex w-full max-h-full mt-2 justify-end">
-                  {/* Like Button */}
-                  <LikeButton
-                    postId={post._id}
-                    initialLikes={post.likes || 0}
-                  />
-
-                  {/* Repost Button */}
-                  <li
-                    onClick={() => {
-                      // togglePostSettings(post._id, 1);
-                    }}
-                    className={`px-2 ${
-                      repostedPosts.includes(post._id) ? "text-blue-500" : ""
-                    }`}
-                  >
-                    <i className="fa-solid fa-retweet me-1"></i>{" "}
-                    {post.reposts && post.reposts ? post.reposts : 0}
-                  </li>
-                </ul>
               </div>
-              {/* <hr className='bg-white w-full mt-3' /> */}
             </div>
-          </div>
-        ))}
-      {/* Card */}\{" "}
+          ))}
+      </div>
+      {!isAuthenticated && (
+        <div className="hidden lg:flex lg:h-fit lg:flex-wrap lg:w-2/6 lg:p-5 mt-5">
+          <WelcomeSignUp />
+          <WelcomeSignIn />
+        </div>
+      )}
     </div>
   );
 }
