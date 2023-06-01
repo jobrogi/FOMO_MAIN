@@ -15,10 +15,10 @@ function Header() {
         <li className="w-full px-6">
           <div className="w-full h-8 rounded-2xl bg-DarkGray relative">
             <i className="absolute top-2 left-2 text-md fa-solid fa-magnifying-glass "></i>
-
             <input
               className="w-full ps-8 rounded-2xl h-8 bg-transparent"
               type="search"
+              id="_search"
             />
           </div>
         </li>

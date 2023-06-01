@@ -123,7 +123,8 @@ function SignUpButton(props) {
           </div>
           <form
             method="POST"
-            id="SignUp"
+            // id="SignUp"
+            name="Sign Up"
             className="w-full h-fit pointer-events-auto text-White"
           >
             <div>
@@ -150,7 +151,7 @@ function SignUpButton(props) {
               <div className="flex flex-nowrap w-full">
                 <input
                   type="text"
-                  id="fName"
+                  name="fName"
                   className="p-3 mb-2 m-1 w-1/2 outline-none text-black"
                   placeholder="First Name"
                   onChange={(e) => {
@@ -159,7 +160,7 @@ function SignUpButton(props) {
                 />
                 <input
                   type="text"
-                  id="lName"
+                  name="lName"
                   className="p-3 mb-2 m-1 w-1/2 outline-none text-black"
                   placeholder="Last Name"
                   onChange={(e) => {
@@ -175,7 +176,8 @@ function SignUpButton(props) {
               </h1>
               <input
                 type="email"
-                id="email"
+                autoComplete="email"
+                name="email"
                 className="p-3 mb-2 m-1 w-full outline-none text-black"
                 placeholder="Email Address"
                 onChange={(e) => {
@@ -190,7 +192,7 @@ function SignUpButton(props) {
               </h1>
               <input
                 type="date"
-                id="dob"
+                name="Date of birth"
                 className="p-3 mb-2 m-1 w-full outline-none text-black"
                 placeholder="Date of Birth"
                 onChange={(e) => {
@@ -251,7 +253,8 @@ function SignUpButton(props) {
               <input
                 form="SignUp"
                 type="text"
-                id="username"
+                autoComplete="username"
+                name="Username"
                 className="p-3 mb-2 m-1 w-full outline-none text-black"
                 placeholder="Enter Username"
                 onChange={(e) => {
@@ -265,7 +268,8 @@ function SignUpButton(props) {
               <input
                 form="SignUp"
                 type="password"
-                id="password"
+                autoComplete="password"
+                name="Password"
                 className="p-3 mb-2 m-1 w-full outline-none text-black"
                 placeholder="Enter Password"
                 onChange={(e) => {

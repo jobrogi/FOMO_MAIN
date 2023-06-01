@@ -119,7 +119,7 @@ function SignInButton(props) {
               {/* Sign in with google */}
               <form
                 method="POST"
-                id="signIn"
+                name="signIn"
                 className="w-full h-fit pointer-events-auto "
               >
                 <div className="flex flex-wrap justify-center p-2">
@@ -146,7 +146,7 @@ function SignInButton(props) {
               {/* Sign in with our data. */}
               <form
                 action="POST"
-                id="SignIn"
+                name="SignIn"
                 className="w-full h-fit pointer-events-auto "
               >
                 <p>Login with Us 1/2</p>
@@ -155,7 +155,7 @@ function SignInButton(props) {
                     Username
                   </h1>
                   <input
-                    id="_username"
+                    name="_username"
                     type="text"
                     className="p-3 mb-2 m-1 w-full outline-none text-black"
                     placeholder="ElonMusk1776"
@@ -171,7 +171,7 @@ function SignInButton(props) {
                   </h1>
                   <div className="flex items-center justify-center relative w-full p-0 m-0">
                     <input
-                      id="_password"
+                      name="_password"
                       type="password"
                       className="p-3 mb-2 m-1 w-full outline-none text-black pointer-events-auto auto"
                       placeholder="qwerty"

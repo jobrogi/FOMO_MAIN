@@ -48,7 +48,7 @@ function Feed() {
             <div
               className={
                 !isAuthenticated
-                  ? "mt-5 ms-32 w-full flex"
+                  ? "mt-5 sm:ms-32 w-full flex"
                   : "mt-5 justify-center w-full flex"
               }
               key={post._id}
@@ -77,7 +77,7 @@ function Feed() {
                   <div className="flex items-center min-w-230">
                     <div className="max-w-500 border-white">
                       <img
-                        className=" w-500 h-full rounded object-cover"
+                        className="w-full md:w-500 h-full rounded object-cover"
                         src={post.imageData}
                         alt=" POSTED"
                       />
