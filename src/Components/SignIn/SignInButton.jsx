@@ -71,19 +71,6 @@ function SignInButton(props) {
     }
   }
 
-  function SetFormSection(e) {
-    if (e.target.value === "Close") {
-      setFormSection(0);
-    }
-
-    if (e.target.value === "Next") {
-      setFormSection(formSection + 1);
-    }
-    if (e.target.value === "Back") {
-      setFormSection(formSection - 1);
-    }
-  }
-
   return (
     <div className="">
       <button
