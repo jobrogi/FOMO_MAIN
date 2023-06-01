@@ -11,6 +11,7 @@ module.exports = {
         LightGray: "#B3B3B3",
         GoogleRed: "#DB4437",
         GoogleBlue: "#4285F4",
+        DarkGray: "#202327",
       },
       spacing: {
         120: "500px",
