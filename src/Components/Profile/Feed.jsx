@@ -4,32 +4,24 @@ import axios from "axios";
 import LikeButton from "../Post/LikeButton";
 import WelcomeSignUp from "../SignUp/WelcomeSignUp";
 import WelcomeSignIn from "../SignIn/WelcomeSignIn";
+import serverRequest from "../Requests";
 function Feed() {
   const [posts, setPosts] = useState([]);
   const [repostedPosts] = useState([]);
   const { isAuthenticated } = useContext(AuthContext);
 
+  // Made a new component just for making the axios.get requests
   useEffect(() => {
-    // const userData = localStorage.getItem("userData");
+    serverRequest({
+      route: 'getFeed',
+      headers: { 'Content-Type': 'application/json' }
+    }).then((response) => {
+      console.log(response.data);
+      setPosts(response.data);
+    }).catch(err => {
+      console.log('err! ' + err);
+    });
 
-    let url;
-    if (window.location.hostname === "localhost") {
-      url = "http://localhost:8080/getFeed";
-    } else {
-      url = "https://gilliamsserver.herokuapp.com/getFeed";
-    }
-
-    axios
-      .get(url, {}) // Include the postId and updatedLikes in the data payload
-      .then((response) => {
-        // Handle the response if needed
-        console.log(response.data);
-        setPosts(response.data);
-      })
-      .catch((error) => {
-        // Handle the error
-        console.error("Error updating post settings:", error);
-      });
   }, []);
 
   return (
@@ -70,7 +62,6 @@ function Feed() {
                       </div>
                     )}
 
-                    {console.log(post)}
                   </div>
                 </div>
 
@@ -111,11 +102,10 @@ function Feed() {
                         onClick={() => {
                           // togglePostSettings(post._id, 1);
                         }}
-                        className={`px-2 ${
-                          repostedPosts.includes(post._id)
-                            ? "text-blue-500"
-                            : ""
-                        }`}
+                        className={`px-2 ${repostedPosts.includes(post._id)
+                          ? "text-blue-500"
+                          : ""
+                          }`}
                       >
                         <i className="fa-solid fa-retweet me-1"></i>{" "}
                         {post.reposts && post.reposts ? post.reposts : 0}

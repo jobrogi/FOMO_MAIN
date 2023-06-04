@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import AuthContext from "../AuthContext";
-import axios from "axios";
 import Post from "../Post/Post";
 
 function Profile(props) {
