@@ -11,7 +11,7 @@ function PostDescription({ fullText }) {
   const shouldTruncate = fullText.length > 100 && !isExpanded;
 
   return (
-    <div>
+    <div className="whitespace-normal max-w-full">
       {shouldTruncate ? (
         <span>
           {truncatedText}...{" "}
@@ -20,8 +20,8 @@ function PostDescription({ fullText }) {
           </button>
         </span>
       ) : (
-        <span>
-          {fullText}{" "}
+        <span className="max-w-full">
+          {fullText}
           {isExpanded && (
             <button className="underline" onClick={toggleExpand}>
               Show less

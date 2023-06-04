@@ -7,7 +7,7 @@ function updateLikes(postId, updatedLikes, userId) {
   const url =
     window.location.hostname === "localhost"
       ? "http://localhost:8080/updateLikes"
-      : "https://pacific-citadel-02863.herokuapp.com/updateLikes";
+      : "https://gilliamsserver.herokuapp.com/updateLikes";
 
   return axios.post(url, {
     postId: postId,
@@ -21,7 +21,7 @@ function updateReposts(postId, updatedReposts, userId) {
   const url =
     window.location.hostname === "localhost"
       ? "http://localhost:8080/updateReposts"
-      : "https://pacific-citadel-02863.herokuapp.com/updateReposts";
+      : "https://gilliamsserver.herokuapp.com/supdateReposts";
 
   return axios.post(url, {
     postId: postId,

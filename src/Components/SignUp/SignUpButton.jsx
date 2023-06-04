@@ -22,7 +22,7 @@ function SignUpButton(props) {
       if (window.location.hostname === "localhost") {
         url = "http://localhost:8080/signUp";
       } else {
-        url = "https://pacific-citadel-02863.herokuapp.com/signUp";
+        url = "https://gilliamsserver.herokuapp.com/signUp";
       }
 
       fetch(url, {

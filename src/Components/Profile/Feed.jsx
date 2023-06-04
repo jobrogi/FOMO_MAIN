@@ -16,7 +16,7 @@ function Feed() {
     if (window.location.hostname === "localhost") {
       url = "http://localhost:8080/getFeed";
     } else {
-      url = "https://pacific-citadel-02863.herokuapp.com/getFeed";
+      url = "https://gilliamsserver.herokuapp.com/getFeed";
     }
 
     axios
@@ -58,8 +58,18 @@ function Feed() {
                 {/* PROFILE IMAGE*/}
                 <div className="h-full pe-2">
                   <div className="w-12 h-12 bg-black rounded-full">
-                    {/* Need to figure out why image will only show up after log in. */}
-                    <img src={post.user.imageData} alt="User Profile Picture" />
+                    {post.user.profileImage != "null" ? (
+                      <img
+                        className="w-12 h-12 rounded-full object-cover"
+                        src={post.user.profileImage}
+                        alt="User Profile Picture"
+                      />
+                    ) : (
+                      <div className="text-white w-12 h-12 rounded-full flex justify-center items-center">
+                        <i className="text-xl fa-solid fa-user"></i>
+                      </div>
+                    )}
+
                     {console.log(post)}
                   </div>
                 </div>
@@ -68,6 +78,7 @@ function Feed() {
                   {/* USERNAME / NAME */}
                   <div className="flex">
                     <h1 className="whitespace-nowrap font-bold">
+                      {console.log(post)}
                       {post.user.fName + " " + post.user.lName}
                     </h1>
                     <h1 className="text-gray-400">@{post.user.username}</h1>

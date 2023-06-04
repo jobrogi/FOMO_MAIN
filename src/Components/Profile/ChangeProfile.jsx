@@ -58,7 +58,7 @@ function ChangeProfile() {
     if (window.location.hostname === "localhost") {
       url = "http://localhost:8080/changeUserData";
     } else {
-      url = "https://pacific-citadel-02863.herokuapp.com/changeUserData";
+      url = "https://gilliamsserver.herokuapp.com/changeUserData";
     }
     const data = JSON.parse(userData);
     console.log(data);

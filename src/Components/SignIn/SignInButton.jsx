@@ -15,7 +15,7 @@ function SignInButton(props) {
     if (window.location.hostname === "localhost") {
       url = "http://localhost:8080/logIn";
     } else {
-      url = "https://pacific-citadel-02863.herokuapp.com/logIn";
+      url = "https://gilliamsserver.herokuapp.com/logIn";
     }
 
     fetch(url, {

@@ -45,7 +45,7 @@ function AddPost() {
     if (window.location.hostname === "localhost") {
       url = "http://localhost:8080/post";
     } else {
-      url = "https://pacific-citadel-02863.herokuapp.com/post";
+      url = "https://gilliamsserver.herokuapp.com/post";
     }
 
     fetch(url, {

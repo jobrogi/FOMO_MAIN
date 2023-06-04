@@ -24,7 +24,7 @@ function Post(props) {
     if (window.location.hostname === "localhost") {
       url = "http://localhost:8080" + route;
     } else {
-      url = "https://pacific-citadel-02863.herokuapp.com" + route;
+      url = "https://gilliamsserver.herokuapp.com" + route;
     }
 
     const requestData = {
@@ -78,7 +78,7 @@ function Post(props) {
         if (window.location.hostname === "localhost") {
           url = "http://localhost:8080/updateLikes";
         } else {
-          url = "https://pacific-citadel-02863.herokuapp.com/updateLikes";
+          url = "https://gilliamsserver.herokuapp.com/updateLikes";
         }
         const parsedData = JSON.parse(userData);
 
@@ -98,7 +98,6 @@ function Post(props) {
           });
       } else {
         console.log("TWO");
-        console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + userData);
 
         // User has not liked the post, so add the like
         setPosts((prevPosts) =>
@@ -123,7 +122,7 @@ function Post(props) {
         if (window.location.hostname === "localhost") {
           url = "http://localhost:8080/updateLikes";
         } else {
-          url = "https://pacific-citadel-02863.herokuapp.com/updateLikes";
+          url = "https://gilliamsserver.herokuapp.com/updateLikes";
         }
         const parsedData = JSON.parse(userData);
         console.log(parsedData.userId);
@@ -171,7 +170,7 @@ function Post(props) {
         const url =
           window.location.hostname === "localhost"
             ? "http://localhost:8080/updateReposts"
-            : "https://pacific-citadel-02863.herokuapp.com/updateReposts";
+            : "https://gilliamsserver.herokuapp.com/updateReposts";
 
         const parsedData = JSON.parse(userData);
         console.log(parsedData.userId);
@@ -208,7 +207,7 @@ function Post(props) {
         const url =
           window.location.hostname === "localhost"
             ? "http://localhost:8080/updateReposts"
-            : "https://pacific-citadel-02863.herokuapp.com/updateReposts";
+            : "https://gilliamsserver.herokuapp.com/updateReposts";
         const parsedData = JSON.parse(userData);
 
         axios
@@ -231,7 +230,7 @@ function Post(props) {
     if (window.location.hostname === "localhost") {
       url = "http://localhost:8080/deletePost";
     } else {
-      url = "https://pacific-citadel-02863.herokuapp.com/deletePost";
+      url = "https://gilliamsserver.herokuapp.com/deletePost";
     }
 
     fetch(url, {
@@ -313,7 +312,7 @@ function Post(props) {
                   <li className="">
                     <div className="w-10 h-10 rounded-full bg-white"></div>
                   </li>
-                  <li className="ms-3 align-center">
+                  <li className="ms-3 align-center w-full">
                     <ul className="text-sm flex">
                       <li className="font-bold text-white">
                         {" "}
@@ -323,7 +322,7 @@ function Post(props) {
                         @{post.user.username}
                       </li>
                     </ul>
-                    <div className="text-white whitespace-wrap">
+                    <div className=" max-w-full text-white ">
                       <PostDesc fullText={post.postDesc} />
                     </div>
                   </li>

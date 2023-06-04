@@ -9,7 +9,7 @@ function Settings() {
     if (window.location.hostname === "localhost") {
       url = "http://localhost:8080/logout";
     } else {
-      url = "https://pacific-citadel-02863.herokuapp.com/logout";
+      url = "https://gilliamsserver.herokuapp.com/logout";
     }
 
     fetch(url, {
