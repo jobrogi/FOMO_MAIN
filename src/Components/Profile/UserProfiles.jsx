@@ -4,7 +4,6 @@ import Post from "../Post/Post";
 function UserProfiles(props) {
   const [profileSection, setProfileSection] = useState(0);
 
-  useEffect(() => {}, []);
   return (
     <div className="min-h-screen w-full relative z-0">
       <div className="min-h-fit w-full p-3">

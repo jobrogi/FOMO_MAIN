@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import AuthContext from "../AuthContext";
+import serverRequest from "../Requests";
 
 function SignUpButton(props) {
   const [fName, setFName] = useState("");
@@ -18,41 +19,24 @@ function SignUpButton(props) {
     if (year >= currentYear - 13) {
       console.log("Under 13");
     } else {
-      let url;
-      if (window.location.hostname === "localhost") {
-        url = "http://localhost:8080/signUp";
-      } else {
-        url = "https://gilliamsserver.herokuapp.com/signUp";
-      }
-
-      fetch(url, {
-        method: "POST",
-        body: JSON.stringify({ fName, lName, email, dob, username, password }),
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-        },
+      serverRequest({
+        route: "signUp",
+        headers: { "Content-Type": "application/json" },
+        method: "post",
+        data: { fName, lName, email, dob, username, password },
       })
         .then((response) => {
-          if (!response.ok) {
-            return response.text().then((errorMessage) => {
-              throw new Error(errorMessage);
-            });
-          } else {
-            return response.json();
-          }
-        })
-        .then((data) => {
           const userData = {
-            fName: data.user.fName,
-            lName: data.user.lName,
-            email: data.user.email,
-            username: data.user.username,
-            userId: data.user._id,
+            fName: response.data.user.fName,
+            lName: response.data.user.lName,
+            email: response.data.user.email,
+            username: response.data.user.username,
+            userId: response.data.user._id,
           };
           console.log(userData);
 
-          console.log("DATA " + data);
-          localStorage.setItem("sessionId", data.sessionId);
+          console.log("DATA " + response.data);
+          localStorage.setItem("sessionId", response.data.sessionId);
           localStorage.setItem("userData", JSON.stringify(userData));
 
           console.log(localStorage.getItem("userData"));
@@ -60,8 +44,8 @@ function SignUpButton(props) {
           setUser(userData);
           setCurrentPage(1);
         })
-        .catch((error) => {
-          console.log(error);
+        .catch((err) => {
+          console.log("err! " + err);
         });
     }
   }

@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import PostDesc from "./PostDesc";
+import serverRequest from "../Requests";
 
 function Post(props) {
   // USER SIGNED IN HERE
   const userData = localStorage.getItem("userData");
-
-  const [nameString, setNameString] = useState("");
-
   // POSTS GIVEN FROM SERVER END
   const [posts, setPosts] = useState([]);
   const [likedPosts, setLikedPosts] = useState([]);
@@ -20,30 +17,26 @@ function Post(props) {
     // console.log(userData);
     const { route } = props;
 
-    let url;
-    if (window.location.hostname === "localhost") {
-      url = "http://localhost:8080" + route;
-    } else {
-      url = "https://gilliamsserver.herokuapp.com" + route;
-    }
-
     const requestData = {
       userData:
-        route === "/getUserPosts" ||
-        route === "/getUserLikedPosts" ||
-        route === "/getUserReposts"
+        route === "getUserPosts" ||
+        route === "getUserLikedPosts" ||
+        route === "getUserReposts"
           ? JSON.parse(userData) // Parse the userData string back into an object
           : props.userData,
     };
 
-    axios
-      .post(url, requestData)
+    serverRequest({
+      route: route,
+      headers: { "Content-Type": "application/json" },
+      method: "post",
+      data: requestData,
+    })
       .then((response) => {
-        console.log("Response data:", response.data);
         setPosts(response.data);
       })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
+      .catch((err) => {
+        console.log("err! " + err);
       });
   }, []);
 
@@ -73,28 +66,23 @@ function Post(props) {
         // Calculate the updated total likes
         const updatedLikes = postToUpdate.likes ? postToUpdate.likes - 1 : 0;
 
-        // Send the Axios POST request to update post settings
-        let url;
-        if (window.location.hostname === "localhost") {
-          url = "http://localhost:8080/updateLikes";
-        } else {
-          url = "https://gilliamsserver.herokuapp.com/updateLikes";
-        }
         const parsedData = JSON.parse(userData);
 
-        axios
-          .post(url, {
+        serverRequest({
+          route: "updateLikes",
+          headers: { "Content-Type": "application/json" },
+          method: "post",
+          data: {
             postId: postId,
             likes: updatedLikes,
             userId: parsedData.userId,
-          }) // Include the postId and updatedLikes in the data payload
+          },
+        })
           .then((response) => {
-            // Handle the response if needed
             console.log("Post settings updated successfully:", response.data);
           })
-          .catch((error) => {
-            // Handle the error
-            console.error("Error updating post settings:", error);
+          .catch((err) => {
+            console.log("err! " + err);
           });
       } else {
         console.log("TWO");
@@ -118,27 +106,23 @@ function Post(props) {
         localStorage.setItem(`likedPost_${postId}`, true);
 
         // Send the Axios POST request to update post settings
-        let url;
-        if (window.location.hostname === "localhost") {
-          url = "http://localhost:8080/updateLikes";
-        } else {
-          url = "https://gilliamsserver.herokuapp.com/updateLikes";
-        }
         const parsedData = JSON.parse(userData);
-        console.log(parsedData.userId);
-        axios
-          .post(url, {
+
+        serverRequest({
+          route: "updateLikes",
+          headers: { "Content-Type": "application/json" },
+          method: "post",
+          data: {
             postId: postId,
             likes: updatedLikes,
             userId: parsedData.userId,
-          }) // Include the postId and updatedLikes in the data payload
+          },
+        })
           .then((response) => {
-            // Handle the response if needed
             console.log("Post settings updated successfully:", response.data);
           })
-          .catch((error) => {
-            // Handle the error
-            console.error("Error updating post settings:", error);
+          .catch((err) => {
+            console.log("err! " + err);
           });
 
         setLikedPosts((prevLikedPosts) => [...prevLikedPosts, postId]);
@@ -167,24 +151,24 @@ function Post(props) {
           : 0;
 
         // Send the Axios POST request to update post settings for reposts
-        const url =
-          window.location.hostname === "localhost"
-            ? "http://localhost:8080/updateReposts"
-            : "https://gilliamsserver.herokuapp.com/updateReposts";
 
         const parsedData = JSON.parse(userData);
-        console.log(parsedData.userId);
-        axios
-          .post(url, {
+
+        serverRequest({
+          route: "updateReposts",
+          headers: { "Content-Type": "application/json" },
+          method: "post",
+          data: {
             postId: postId,
             reposts: updatedReposts,
             userId: parsedData.userId,
-          })
+          },
+        })
           .then((response) => {
             console.log("Post settings updated successfully:", response.data);
           })
-          .catch((error) => {
-            console.error("Error updating post settings:", error);
+          .catch((err) => {
+            console.log("err! " + err);
           });
       } else {
         // User has not reposted the post, so add the repost
@@ -204,55 +188,43 @@ function Post(props) {
           : 1;
 
         // Send the Axios POST request to update post settings for reposts
-        const url =
-          window.location.hostname === "localhost"
-            ? "http://localhost:8080/updateReposts"
-            : "https://gilliamsserver.herokuapp.com/updateReposts";
+
         const parsedData = JSON.parse(userData);
 
-        axios
-          .post(url, {
+        serverRequest({
+          route: "updateReposts",
+          headers: { "Content-Type": "application/json" },
+          method: "post",
+          data: {
             postId: postId,
             reposts: updatedReposts,
             userId: parsedData.userId,
-          })
+          },
+        })
           .then((response) => {
             console.log("Post settings updated successfully:", response.data);
           })
-          .catch((error) => {
-            console.error("Error updating post settings:", error);
+          .catch((err) => {
+            console.log("err! " + err);
           });
       }
     }
   };
+
   function handleDeletePost(postId) {
-    let url;
-    if (window.location.hostname === "localhost") {
-      url = "http://localhost:8080/deletePost";
-    } else {
-      url = "https://gilliamsserver.herokuapp.com/deletePost";
-    }
-
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ postId, username: userData.username }),
+    const data = JSON.parse(userData);
+    console.log(data.username);
+    serverRequest({
+      route: "deletePost",
+      headers: { "Content-Type": "application/json" },
+      method: "post",
+      data: { postId, username: data.username },
     })
-      .then((response) => response.json())
-      .then((data) => {
-        // Handle the response data
-        // Refresh the profile page.
-
+      .then((response) => {
         window.location.reload();
-
-        console.log("Post deleted successfully:", data);
-        // Update the posts state if needed
       })
-      .catch((error) => {
-        // Handle the error
-        console.error("Error deleting post:", error);
+      .catch((err) => {
+        console.log("err! " + err);
       });
   }
 
@@ -289,7 +261,7 @@ function Post(props) {
               <div className="w-full min-h-fit h-fit flex flex-wrap relative">
                 <div
                   className={
-                    myProfile === true
+                    myProfile === false
                       ? "absolute -top-4 right-0 text-2xl p-2 text-dark-text"
                       : "hidden"
                   }

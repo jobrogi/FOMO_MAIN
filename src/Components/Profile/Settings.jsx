@@ -1,30 +1,23 @@
 import React from "react";
 import AuthContext from "../AuthContext";
+import serverRequest from "../Requests";
 
 function Settings() {
   function handleLogout() {
     console.log("Logging Out");
 
-    let url;
-    if (window.location.hostname === "localhost") {
-      url = "http://localhost:8080/logout";
-    } else {
-      url = "https://gilliamsserver.herokuapp.com/logout";
-    }
-
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+    serverRequest({
+      route: "logout",
+      headers: { "Content-Type": "application/json" },
+      method: "post",
     })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data.message); // Display the response message in the console
+      .then((response) => {
+        console.log(response);
       })
-      .catch((error) => {
-        console.error("Error:", error); // Display any errors that occurred
+      .catch((err) => {
+        console.log("err! " + err);
       });
+
     localStorage.removeItem("sessionId");
     localStorage.removeItem("user");
     localStorage.setItem("currentPage", 0);

@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import AuthContext from "../AuthContext";
+import serverRequest from "../Requests";
 
 function SignInButton(props) {
   const { setIsAuthenticated, setCurrentPage } = useContext(AuthContext);
@@ -9,50 +10,32 @@ function SignInButton(props) {
 
   function handleLogIn(e) {
     e.preventDefault();
-    console.log(username + "  " + password);
 
-    let url;
-    if (window.location.hostname === "localhost") {
-      url = "http://localhost:8080/logIn";
-    } else {
-      url = "https://gilliamsserver.herokuapp.com/logIn";
-    }
-
-    fetch(url, {
-      method: "POST",
-      body: JSON.stringify({ username, password }),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
+    serverRequest({
+      route: "logIn",
+      headers: { "Content-Type": "application/json" },
+      method: "post",
+      data: { username, password },
     })
       .then((response) => {
-        if (!response.ok) {
-          return response.text().then((errorMessage) => {
-            throw new Error(errorMessage);
-          });
-        } else {
-          return response.json();
-        }
-      })
-      .then((data) => {
-        console.log("DATA" + data.user._id);
+        console.log(response.data);
         const userData = {
-          fName: data.user.fName,
-          lName: data.user.lName,
-          email: data.user.email,
-          username: data.user.username,
-          userId: data.user._id,
+          fName: response.data.user.fName,
+          lName: response.data.user.lName,
+          email: response.data.user.email,
+          username: response.data.user.username,
+          userId: response.data.user._id,
         };
         localStorage.setItem("userData", JSON.stringify(userData));
 
-        localStorage.setItem("sessionId", data.sessionId);
-        localStorage.setItem("userId", data.user._id);
+        localStorage.setItem("sessionId", response.data.sessionId);
+        localStorage.setItem("userId", response.data.user._id);
 
         setIsAuthenticated(true);
         setCurrentPage(1);
       })
-      .catch((error) => {
-        console.log("CATCH ERROR @ SIGN IN " + error);
+      .catch((err) => {
+        console.log("CATCH ERROR @ SIGN IN " + err);
       });
   }
 

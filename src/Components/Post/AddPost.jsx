@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import ImageHandler from "./ImageUploader";
 import AuthContext from "../AuthContext";
 import ImageResizer from "react-image-file-resizer";
+import serverRequest from "../Requests";
 
 function AddPost() {
   const [imageData, setImageData] = useState("");
@@ -20,7 +21,7 @@ function AddPost() {
               500,
               500,
               "JPEG",
-              90,
+              10,
               0,
               (uri) => {
                 resolve(uri);
@@ -41,43 +42,24 @@ function AddPost() {
 
   function sendPostData(base64Data) {
     const postDesc = document.getElementById("postDesc").value;
-    let url;
-    if (window.location.hostname === "localhost") {
-      url = "http://localhost:8080/post";
-    } else {
-      url = "https://gilliamsserver.herokuapp.com/post";
-    }
 
-    fetch(url, {
-      method: "POST",
-      body: JSON.stringify({
+    serverRequest({
+      route: "post",
+      headers: { "Content-Type": "application/json" },
+      method: "post",
+      data: {
         username: userData.username,
         imageData: base64Data,
         postDesc: postDesc,
-      }),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
       },
     })
       .then((response) => {
-        if (!response.ok) {
-          return response.text().then((errorMessage) => {
-            throw new Error(errorMessage);
-          });
-        } else {
-          return response.json();
-        }
-      })
-      .then((data) => {
-        // Code to execute after successful fetch response
-        console.log("Working");
-        console.log(data);
         localStorage.setItem("currentPage", 1);
         window.location.reload();
         setCurrentPage(1);
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((err) => {
+        console.log("err! " + err);
       });
   }
 

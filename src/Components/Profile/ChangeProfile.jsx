@@ -1,19 +1,15 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import ImageResizer from "react-image-file-resizer";
-import axios from "axios";
 import AuthContext from "../AuthContext";
+import serverRequest from "../Requests";
 
 // const userData = JSON.parse(localStorage.getItem("userData") || "{}");
 const userData = localStorage.getItem("userData");
 
 function ChangeProfile() {
-  useEffect(() => {
-    console.log(userData);
-  }, []);
-
   const [profilePicture, setProfilePicture] = useState(null);
   const [previewURL, setPreviewURL] = useState(null);
-  const { setCurrentPage, setCurrentRoute } = React.useContext(AuthContext);
+  const { setCurrentPage } = React.useContext(AuthContext);
 
   const fName = useRef(null);
   const lName = useRef(null);
@@ -52,24 +48,19 @@ function ChangeProfile() {
       );
     });
 
-    // Make Post Request to change user Data.
-
-    let url;
-    if (window.location.hostname === "localhost") {
-      url = "http://localhost:8080/changeUserData";
-    } else {
-      url = "https://gilliamsserver.herokuapp.com/changeUserData";
-    }
     const data = JSON.parse(userData);
-    console.log(data);
-    axios
-      .post(url, {
+    serverRequest({
+      route: "changeUserData",
+      headers: { "Content-Type": "application/json" },
+      method: "post",
+      data: {
         fName: inputFName,
         lName: inputLName,
         profileDesc: inputDesc,
         profileImage: resizedImage,
         data: data,
-      })
+      },
+    })
       .then((response) => {
         const updatedUserData = {
           fName: inputFName,
@@ -78,20 +69,15 @@ function ChangeProfile() {
           username: response.data.user.username,
           userId: data.userId,
         };
-        console.log("HERE" + JSON.stringify(updatedUserData));
-
         const userProfileImage = response.data.user.profileImage;
         localStorage.setItem(
           "userProfileImage",
           JSON.stringify(userProfileImage)
         );
-        // console.log(response.data.user);
-
-        localStorage.setItem("userData", JSON.stringify(updatedUserData));
         setCurrentPage(1);
       })
-      .catch((error) => {
-        console.log("err: " + error);
+      .catch((err) => {
+        console.log("err! " + err);
       });
   };
 

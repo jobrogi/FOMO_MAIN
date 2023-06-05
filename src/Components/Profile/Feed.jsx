@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
 import AuthContext from "../AuthContext";
-import axios from "axios";
 import LikeButton from "../Post/LikeButton";
 import WelcomeSignUp from "../SignUp/WelcomeSignUp";
 import WelcomeSignIn from "../SignIn/WelcomeSignIn";
@@ -13,15 +12,17 @@ function Feed() {
   // Made a new component just for making the axios.get requests
   useEffect(() => {
     serverRequest({
-      route: 'getFeed',
-      headers: { 'Content-Type': 'application/json' }
-    }).then((response) => {
-      console.log(response.data);
-      setPosts(response.data);
-    }).catch(err => {
-      console.log('err! ' + err);
-    });
-
+      route: "getFeed",
+      headers: { "Content-Type": "application/json" },
+      method: "get",
+    })
+      .then((response) => {
+        // console.log(response.data);
+        setPosts(response.data);
+      })
+      .catch((err) => {
+        console.log("err! " + err);
+      });
   }, []);
 
   return (
@@ -61,7 +62,6 @@ function Feed() {
                         <i className="text-xl fa-solid fa-user"></i>
                       </div>
                     )}
-
                   </div>
                 </div>
 
@@ -102,10 +102,11 @@ function Feed() {
                         onClick={() => {
                           // togglePostSettings(post._id, 1);
                         }}
-                        className={`px-2 ${repostedPosts.includes(post._id)
-                          ? "text-blue-500"
-                          : ""
-                          }`}
+                        className={`px-2 ${
+                          repostedPosts.includes(post._id)
+                            ? "text-blue-500"
+                            : ""
+                        }`}
                       >
                         <i className="fa-solid fa-retweet me-1"></i>{" "}
                         {post.reposts && post.reposts ? post.reposts : 0}

@@ -4,10 +4,6 @@ import AuthContext from "../AuthContext";
 function UserNav(props) {
   const { setCurrentPage } = React.useContext(AuthContext);
   return (
-    // <div className="min-h-fit w-full  pointer-events-none">
-
-    // // </div>
-
     <div className="sticky bottom-0 w-full mt-10">
       <div className="flex flex-wrap bg-black w-full bottom-0 px-4 transition-all duration-200">
         <div className="sm:flex flex flex-nowrap w-full justify-center">

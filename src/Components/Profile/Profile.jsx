@@ -7,10 +7,6 @@ function Profile(props) {
   const userData = JSON.parse(localStorage.getItem("userData"));
   const userProfileImage = JSON.parse(localStorage.getItem("userProfileImage"));
 
-  useEffect(() => {
-    console.log("USER DATA ON PROFILE " + userData);
-  }, []);
-
   const [profileSection, setProfileSection] = useState(0);
 
   return (
@@ -98,13 +94,13 @@ function Profile(props) {
         </div>
 
         {/* Media Section */}
-        {profileSection === 0 && <Post route="/getUserPosts" />}
+        {profileSection === 0 && <Post route="getUserPosts" />}
 
         {/* Liked Posts Section */}
-        {profileSection === 1 && <Post route="/getUserLikedPosts" />}
+        {profileSection === 1 && <Post route="getUserLikedPosts" />}
 
         {/* Reposts Section */}
-        {profileSection === 2 && <Post route="/getUserReposts" />}
+        {profileSection === 2 && <Post route="getUserReposts" />}
       </div>
     </div>
     // </div>
