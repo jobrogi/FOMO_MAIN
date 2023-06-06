@@ -51,11 +51,11 @@ function Feed() {
                 {/* PROFILE IMAGE*/}
                 <div className="h-full pe-2">
                   <div className="w-12 h-12 bg-black rounded-full">
-                    {post.user.profileImage != "null" ? (
+                    {post.user.profileImage !== "null" ? (
                       <img
                         className="w-12 h-12 rounded-full object-cover"
                         src={post.user.profileImage}
-                        alt="User Profile Picture"
+                        alt="User Profile"
                       />
                     ) : (
                       <div className="text-white w-12 h-12 rounded-full flex justify-center items-center">
@@ -72,7 +72,9 @@ function Feed() {
                       {console.log(post)}
                       {post.user.fName + " " + post.user.lName}
                     </h1>
-                    <h1 className="text-gray-400">@{post.user.username}</h1>
+                    <h1 className="text-gray-400">
+                      @{post.user.username + " "}
+                    </h1>
                   </div>
 
                   {/* DESC */}
